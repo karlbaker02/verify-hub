@@ -1,10 +1,8 @@
 package uk.gov.ida.hub.policy.statemachine;
 
 import org.joda.time.DateTime;
-import org.joda.time.Duration;
 import uk.gov.ida.hub.policy.domain.LevelOfAssurance;
 import uk.gov.ida.hub.policy.domain.SessionId;
-import uk.gov.ida.hub.policy.domain.state.SessionStartedState;
 
 import java.util.List;
 

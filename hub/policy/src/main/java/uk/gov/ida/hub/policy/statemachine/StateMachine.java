@@ -4,7 +4,6 @@ import javax.validation.constraints.NotNull;
 
 public class StateMachine {
 
-
     public static StateTNG transition(@NotNull StateTNG currentState, @NotNull Event event){
         switch (currentState){
 
@@ -173,4 +172,7 @@ public class StateMachine {
         throw new InvalidStateException("Current State "+currentState+" cannot accept event "+event);
     }
 
+    public static Transition getTransition(StateTNG startState, Event event) {
+        return new Transition(startState, transition(startState, event));
+    }
 }

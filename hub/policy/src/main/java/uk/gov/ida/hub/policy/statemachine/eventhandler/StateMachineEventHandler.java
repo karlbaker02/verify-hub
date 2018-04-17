@@ -1,13 +1,12 @@
-package uk.gov.ida.hub.policy.eventhandler;
+package uk.gov.ida.hub.policy.statemachine.eventhandler;
 
 import uk.gov.ida.hub.policy.domain.SessionId;
 import uk.gov.ida.hub.policy.domain.SessionRepository;
 import uk.gov.ida.hub.policy.domain.exception.SessionNotFoundException;
 import uk.gov.ida.hub.policy.exception.SessionTimeoutException;
-import uk.gov.ida.hub.policy.statemachine.Event;
-import uk.gov.ida.hub.policy.statemachine.Session;
-import uk.gov.ida.hub.policy.statemachine.StateMachine;
-import uk.gov.ida.hub.policy.statemachine.StateTNG;
+import uk.gov.ida.hub.policy.statemachine.*;
+import uk.gov.ida.hub.policy.statemachine.transitionhandler.StateMachineTransitionHandler;
+import uk.gov.ida.hub.policy.statemachine.transitionhandler.TransitionHandlerFactory;
 
 import static java.text.MessageFormat.format;
 
@@ -31,6 +30,11 @@ public abstract class StateMachineEventHandler {
 
     public final void handleEvent(Event event){
         startState = session.getCurrentState();
+        //StateMachine sm = new StateMachine(startState, session);
+        Transition transition = StateMachine.getTransition(startState, event);
+        StateMachineTransitionHandler transitionHandler = TransitionHandlerFactory.getTransitionHandler(transition);
+        transitionHandler.transition();
+
         endState = StateMachine.transition(startState, event);
 
         delegatedEventHandling(session);

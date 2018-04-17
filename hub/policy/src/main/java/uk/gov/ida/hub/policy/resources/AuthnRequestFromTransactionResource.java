@@ -4,7 +4,7 @@ import com.codahale.metrics.annotation.Timed;
 import uk.gov.ida.hub.policy.Urls;
 import uk.gov.ida.hub.policy.controllogic.AuthnRequestFromTransactionHandler;
 import uk.gov.ida.hub.policy.domain.*;
-import uk.gov.ida.hub.policy.eventhandler.IdpSelectedEventHandler;
+import uk.gov.ida.hub.policy.statemachine.eventhandler.IdpSelectedEventHandler;
 import uk.gov.ida.hub.policy.logging.HubEventLogger;
 import uk.gov.ida.hub.policy.statemachine.Event;
 
