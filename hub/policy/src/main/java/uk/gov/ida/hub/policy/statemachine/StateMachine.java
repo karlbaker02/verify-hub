@@ -175,4 +175,5 @@ public class StateMachine {
     public static Transition getTransition(StateTNG startState, Event event) {
         return new Transition(startState, transition(startState, event));
     }
+
 }

@@ -4,7 +4,7 @@ import uk.gov.ida.hub.policy.domain.SessionRepository;
 import uk.gov.ida.hub.policy.statemachine.Session;
 import uk.gov.ida.hub.policy.statemachine.StateTNG;
 
-public abstract class StateMachineTransitionHandler {
+public class StateMachineTransitionHandler {
 
     private Session session;
     private SessionRepository sessionRepository;
@@ -12,7 +12,6 @@ public abstract class StateMachineTransitionHandler {
     private StateTNG endState;
 
     public StateMachineTransitionHandler(){
-
     }
 
     public void transition() {
