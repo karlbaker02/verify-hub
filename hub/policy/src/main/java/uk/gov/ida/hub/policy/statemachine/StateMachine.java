@@ -4,7 +4,17 @@ import javax.validation.constraints.NotNull;
 
 public class StateMachine {
 
-    public static StateTNG transition(@NotNull StateTNG currentState, @NotNull Event event){
+    private StateTNG currentState;
+
+    public StateMachine(StateTNG initialState){
+        this.currentState = initialState;
+    }
+
+    public StateTNG getCurrentState(){
+        return currentState;
+    }
+
+    public StateTNG peekNextState(@NotNull Event event){
         switch (currentState){
 
             case Authn_Failed_Error:
@@ -172,8 +182,10 @@ public class StateMachine {
         throw new InvalidStateException("Current State "+currentState+" cannot accept event "+event);
     }
 
-    public static Transition getTransition(StateTNG startState, Event event) {
-        return new Transition(startState, transition(startState, event));
+    public Transition transition(Event event){
+        StateTNG startState = this.currentState;
+        this.currentState = peekNextState(event);
+        return new Transition(startState, this.currentState);
     }
 
 }

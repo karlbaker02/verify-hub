@@ -1,27 +1,27 @@
-package uk.gov.ida.hub.policy.statemachine.eventhandler;
+package uk.gov.ida.hub.policy.statemachine;
 
 import uk.gov.ida.hub.policy.domain.SessionId;
 import uk.gov.ida.hub.policy.domain.SessionRepository;
 import uk.gov.ida.hub.policy.domain.exception.SessionNotFoundException;
 import uk.gov.ida.hub.policy.exception.SessionTimeoutException;
-import uk.gov.ida.hub.policy.statemachine.Event;
-import uk.gov.ida.hub.policy.statemachine.Session;
-import uk.gov.ida.hub.policy.statemachine.StateMachine;
-import uk.gov.ida.hub.policy.statemachine.StateTNG;
-import uk.gov.ida.hub.policy.statemachine.Transition;
+import uk.gov.ida.hub.policy.statemachine.eventhandler.StateMachineEventHandler;
 import uk.gov.ida.hub.policy.statemachine.transitionhandler.StateMachineTransitionHandler;
 import uk.gov.ida.hub.policy.statemachine.transitionhandler.TransitionHandlerFactory;
 
 import static java.text.MessageFormat.format;
 
-public abstract class StateMachineEventHandler {
+public final class StateMachineCoordinator {
 
     private Session session;
     private SessionRepository sessionRepository;
+    private StateMachineEventHandler eventHandler;
+    private StateMachineTransitionHandler transitionHandler;
     private StateTNG startState;
     private StateTNG endState;
+    private Event event;
+    private StateMachine stateMachine;
 
-    public StateMachineEventHandler(SessionRepository sessionRepository, SessionId sessionId){
+    public StateMachineCoordinator(SessionRepository sessionRepository, SessionId sessionId){
         this.sessionRepository = sessionRepository;
         session = sessionRepository.getSession(sessionId);
         if (session == null){
@@ -32,26 +32,24 @@ public abstract class StateMachineEventHandler {
         }
     }
 
-    public final void handleEvent(Event event, Session session){
-        startState = this.session.getCurrentState();
-        StateMachine sm = new StateMachine(startState);
-        Transition transition = StateMachine.getTransition(startState, event);
+    public void transition(){
+        startState = session.getCurrentState();
+        stateMachine = new StateMachine(startState);
+        Transition transition = stateMachine.transition(event);
         StateMachineTransitionHandler transitionHandler = TransitionHandlerFactory.getTransitionHandler(transition);
-        transitionHandler.transition();
 
-        endState = sm.transition(event).to();
+        endState = stateMachine.transition(event).to();
 
-        delegatedEventHandling(this.session);
+        eventHandler.handleEvent(event, session);
+        transitionHandler.handleTransition(transition, session);
 
-        this.session.setCurrentState(endState);
-        sessionRepository.updateSession(this.session);
+        session.setCurrentState(endState);
+        sessionRepository.updateSession(session);
     }
 
     public void handleTimeOut(){
         startState = session.getCurrentState();
-        endState = StateMachine.transition(startState, Event.Session_Time_Out_Triggered);
-
-
+        endState = stateMachine.transition(Event.Session_Time_Out_Triggered).to();
 
         session.setCurrentState(endState);
         sessionRepository.updateSession(session);
@@ -59,5 +57,7 @@ public abstract class StateMachineEventHandler {
         throw new SessionTimeoutException(format("Session {0} timed out.", sessionId.getSessionId()), sessionId, session.getRequestIssuerEntityId(), session.getSessionExpiryTimestamp(), session.getRequestId());
     }
 
-    public abstract void delegatedEventHandling(Session session);
+    public void setEvent(Event event) {
+        this.event = event;
+    }
 }

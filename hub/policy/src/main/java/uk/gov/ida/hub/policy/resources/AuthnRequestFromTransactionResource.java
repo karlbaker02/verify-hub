@@ -3,10 +3,14 @@ package uk.gov.ida.hub.policy.resources;
 import com.codahale.metrics.annotation.Timed;
 import uk.gov.ida.hub.policy.Urls;
 import uk.gov.ida.hub.policy.controllogic.AuthnRequestFromTransactionHandler;
-import uk.gov.ida.hub.policy.domain.*;
-import uk.gov.ida.hub.policy.statemachine.eventhandler.IdpSelectedEventHandler;
+import uk.gov.ida.hub.policy.domain.AuthnRequestSignInDetailsDto;
+import uk.gov.ida.hub.policy.domain.AuthnRequestSignInProcess;
+import uk.gov.ida.hub.policy.domain.IdpSelected;
+import uk.gov.ida.hub.policy.domain.SessionId;
+import uk.gov.ida.hub.policy.domain.SessionRepository;
 import uk.gov.ida.hub.policy.logging.HubEventLogger;
 import uk.gov.ida.hub.policy.statemachine.Event;
+import uk.gov.ida.hub.policy.statemachine.StateMachineCoordinator;
 
 import javax.inject.Inject;
 import javax.validation.Valid;
@@ -41,13 +45,11 @@ public class AuthnRequestFromTransactionResource {
     public Response selectIdentityProvider(
             @PathParam(SESSION_ID_PARAM) SessionId sessionId, @Valid IdpSelected idpSelected) {
 
-        IdpSelectedEventHandler idpSelectedEventHandler = new IdpSelectedEventHandler(sessionRepository, hubEventLogger, sessionId, idpSelected.getSelectedIdpEntityId());
+        StateMachineCoordinator smc = new StateMachineCoordinator(sessionRepository, sessionId);
 
-        if (idpSelected.isRegistration()){
-            idpSelectedEventHandler.handleEvent(Event.Idp_Selected);
-        }else{
-            idpSelectedEventHandler.handleEvent(Event.Idp_Selected_For_Registration);
-        }
+        smc.setEvent(idpSelected.isRegistration()?Event.Idp_Selected:Event.Idp_Selected_For_Registration);
+
+        smc.transition();
 
         authnRequestFromTransactionHandler.selectIdpForGivenSessionId(sessionId, idpSelected);
 

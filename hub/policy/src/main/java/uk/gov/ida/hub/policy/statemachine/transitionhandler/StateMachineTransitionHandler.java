@@ -2,18 +2,17 @@ package uk.gov.ida.hub.policy.statemachine.transitionhandler;
 
 import uk.gov.ida.hub.policy.domain.SessionRepository;
 import uk.gov.ida.hub.policy.statemachine.Session;
-import uk.gov.ida.hub.policy.statemachine.StateTNG;
+import uk.gov.ida.hub.policy.statemachine.Transition;
 
 public class StateMachineTransitionHandler {
 
     private Session session;
     private SessionRepository sessionRepository;
-    private StateTNG startState;
-    private StateTNG endState;
+    private Transition transition;
 
     public StateMachineTransitionHandler(){
     }
 
-    public void transition() {
+    public void handleTransition(Transition transition, Session session) {
     }
 }
