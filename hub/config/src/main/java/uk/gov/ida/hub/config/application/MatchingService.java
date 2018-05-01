@@ -4,11 +4,13 @@ import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import uk.gov.ida.hub.config.data.ConfigEntityDataRepository;
 import uk.gov.ida.hub.config.domain.*;
+import uk.gov.ida.hub.config.exceptions.NoMatchingServiceException;
 
 import javax.inject.Inject;
 import java.net.URI;
 import java.util.Collection;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 import static java.util.stream.Collectors.toList;
 
@@ -34,6 +36,15 @@ public class MatchingService {
         return transactionConfigEntityDataRepository.getAllData().stream()
                 .map(transaction -> new MatchingServiceTransaction(transaction.getEntityId(),
                         matchingServiceConfigEntityDataRepository.getData(transaction.getMatchingServiceEntityId()).get()))
+                .collect(toList());
+    }
+
+    public List<URI> geServiceURIs() throws NoMatchingServiceException{
+        return transactionConfigEntityDataRepository.getAllData().stream()
+                .map(transaction -> matchingServiceConfigEntityDataRepository
+                                .getData(transaction.getMatchingServiceEntityId())
+                                .<NoMatchingServiceException>orElseThrow(() -> new NoMatchingServiceException()))
+                .map(MatchingServiceConfigEntityData::getUri)
                 .collect(toList());
     }
 

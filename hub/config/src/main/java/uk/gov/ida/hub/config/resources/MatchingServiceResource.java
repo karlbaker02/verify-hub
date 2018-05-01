@@ -4,6 +4,7 @@ import com.codahale.metrics.annotation.Timed;
 import uk.gov.ida.hub.config.Urls;
 import uk.gov.ida.hub.config.application.MatchingService;
 import uk.gov.ida.hub.config.dto.MatchingServiceConfigEntityDataDto;
+import uk.gov.ida.hub.config.exceptions.NoMatchingServiceException;
 
 import javax.inject.Inject;
 import javax.ws.rs.GET;
@@ -11,7 +12,9 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
+import java.net.URI;
 import java.util.Collection;
+import java.util.List;
 
 import static java.util.stream.Collectors.toList;
 

@@ -26,6 +26,7 @@ public class MatchingServiceTest {
     private static final String TRANSACTION_ENTITY_ID_2 = "http://www.transaction2.gov.uk/SAML2/MD";
     private static final String MATCHING_SERVICE_ENTITY_ID= "a-matching-service-entity-id";
     private static final String MATCHING_SERVICE_ENTITY_ID_2= "another-matching-service-entity-id";
+    public static final URI SERVICE_URI = URI.create("http://foo.bar/default-matching-service-uri");
 
     private MatchingService matchingService;
 
@@ -90,7 +91,7 @@ public class MatchingServiceTest {
         }});
 
         MatchingServiceConfigEntityData matchingServiceConfigEntity = aMatchingServiceConfigEntityData()
-                .withEntityId("http://www.some-rp-ms.gov.uk")
+                .withEntityId(MATCHING_SERVICE_CONFIG_ENTITY_ID)
                 .build();
         when(matchingServiceConfigEntityDataRepository.getData(MATCHING_SERVICE_ENTITY_ID))
                 .thenReturn(Optional.of(matchingServiceConfigEntity));
@@ -135,5 +136,55 @@ public class MatchingServiceTest {
         assertThat(matchingService.getMatchingServices())
                 .hasSize(2)
                 .contains(expectedMatchingServiceTransaction, otherExpectedMatchingServiceTransaction);
+    }
+
+    @Test
+    public void emptyListOfURIsReturned_WhenNoTransactionConfigEntitiesExist() {
+        when(transactionConfigEntityDataRepository.getAllData()).thenReturn(new HashSet<>());
+
+        List<URI> matchingServiceURIs = matchingService.geServiceURIs();
+        assertThat(matchingServiceURIs.isEmpty()).isTrue();
+    }
+
+    @Test(expected = NoSuchElementException.class)
+    public void exceptionThrown_WhenNoMatchingServiceConfigEntitiesExist_XXXXX() {
+        TransactionConfigEntityData transactionConfigEntityData = aTransactionConfigData()
+                .withEntityId(TRANSACTION_ENTITY_ID)
+                .withMatchingServiceEntityId(MATCHING_SERVICE_ENTITY_ID)
+                .build();
+        when(transactionConfigEntityDataRepository.getAllData()).thenReturn(new HashSet<TransactionConfigEntityData>(){{
+            add(transactionConfigEntityData);
+        }});
+
+        when(matchingServiceConfigEntityDataRepository.getData(MATCHING_SERVICE_ENTITY_ID))
+                .thenReturn(Optional.empty());
+
+        try {
+            matchingService.geServiceURIs();
+        } catch (Exception e) {
+
+        }
+    }
+
+    @Test
+    public void listOfServiceUrisReturned_WhenMatchingServiceExists() {
+        TransactionConfigEntityData transactionConfigEntityData = aTransactionConfigData()
+                .withEntityId(TRANSACTION_ENTITY_ID)
+                .withMatchingServiceEntityId(MATCHING_SERVICE_ENTITY_ID)
+                .build();
+        when(transactionConfigEntityDataRepository.getAllData()).thenReturn(new HashSet<TransactionConfigEntityData>(){{
+            add(transactionConfigEntityData);
+        }});
+
+        MatchingServiceConfigEntityData matchingServiceConfigEntity = aMatchingServiceConfigEntityData()
+                .withEntityId(MATCHING_SERVICE_CONFIG_ENTITY_ID)
+                .withUri(SERVICE_URI)
+                .build();
+        when(matchingServiceConfigEntityDataRepository.getData(MATCHING_SERVICE_ENTITY_ID))
+                .thenReturn(Optional.of(matchingServiceConfigEntity));
+
+        assertThat(matchingService.geServiceURIs())
+                .hasSize(1)
+                .contains(SERVICE_URI);
     }
 }
