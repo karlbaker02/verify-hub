@@ -1,7 +1,5 @@
 package uk.gov.ida.hub.policy.statemachine.transitionhandler;
 
-import uk.gov.ida.hub.policy.statemachine.Event;
-import uk.gov.ida.hub.policy.statemachine.StateMachine;
 import uk.gov.ida.hub.policy.statemachine.StateTNG;
 import uk.gov.ida.hub.policy.statemachine.Transition;
 
@@ -14,8 +12,7 @@ public class TransitionHandlerFactory {
 
     // Register TransitionHandlers.
     {
-        StateMachine sm = new StateMachine();
-        transitionHandlers.put(sm.getTransition(StateTNG.Session_Started, Event.Country_Selected), StateMachineTransitionHandler.class);
+        transitionHandlers.put(Transition.of(StateTNG.Session_Started, StateTNG.Idp_Selected), StateMachineTransitionHandler.class);
     }
 
 
