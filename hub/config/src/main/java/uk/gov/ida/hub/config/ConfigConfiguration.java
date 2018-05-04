@@ -64,7 +64,6 @@ public class ConfigConfiguration extends Configuration implements TrustStoreConf
         return serviceInfo.getName();
     }
 
-    @Override
     public ClientTrustStoreConfiguration getClientTrustStoreConfiguration() {
         return this.clientTrustStoreConfiguration;
     }
