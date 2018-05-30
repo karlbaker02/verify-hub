@@ -77,7 +77,7 @@ public class TestSessionResource {
                         testSessionDto.getLevelsOfAssurance().get(testSessionDto.getLevelsOfAssurance().size()-1),
                         testSessionDto.isRegistering(),
                         testSessionDto.getTransactionSupportsEidas()),
-                session);
+                        session);
 
         return Response.ok().build();
     }

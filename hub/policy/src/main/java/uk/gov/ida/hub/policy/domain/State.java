@@ -23,7 +23,7 @@ public interface State {
     boolean getTransactionSupportsEidas();
 
     default StateTNG getThisState(){
-        throw new NotImplementedException("You suck!");
+        throw new NotImplementedException("No uk.gov.ida.hub.policy.statemachine.StateTNG set.");
     }
 
 }

@@ -92,6 +92,5 @@ public class AwaitingCycle3DataStateController extends AbstractAwaitingCycle3Dat
         );
 
         getStateTransitionAction().transitionTo(cycle3MatchRequestSentState);
-
     }
 }
