@@ -38,6 +38,7 @@ import java.security.cert.CertificateEncodingException;
 import java.security.cert.X509Certificate;
 import java.text.ParseException;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -55,6 +56,7 @@ import static uk.gov.ida.saml.core.test.TestCertificateStrings.STUB_IDP_PUBLIC_P
 import static uk.gov.ida.saml.core.test.TestCertificateStrings.TEST_PRIVATE_KEY;
 import static uk.gov.ida.saml.core.test.TestCertificateStrings.TEST_PUBLIC_CERT;
 import static uk.gov.ida.saml.core.test.TestEntityIds.HUB_ENTITY_ID;
+import static uk.gov.ida.saml.metadata.ResourceEncoder.entityIdAsResource;
 
 public class SamlEngineAppRule extends DropwizardAppRule<SamlEngineConfiguration> {
     private static final String VERIFY_METADATA_PATH = "/uk/gov/ida/saml/metadata/federation";
@@ -69,10 +71,9 @@ public class SamlEngineAppRule extends DropwizardAppRule<SamlEngineConfiguration
     private static final HttpStubRule metadataAggregatorServer = new HttpStubRule();
     private static final HttpStubRule trustAnchorServer = new HttpStubRule();
 
-    private String countryEntityId;
-
     private static final KeyStoreResource metadataTrustStore = KeyStoreResourceBuilder.aKeyStoreResource().withCertificate("metadataCA", CACertificates.TEST_METADATA_CA).withCertificate("rootCA", CACertificates.TEST_ROOT_CA).build();
-    private static final KeyStoreResource clientTrustStore = KeyStoreResourceBuilder.aKeyStoreResource().withCertificate("interCA", CACertificates.TEST_CORE_CA).withCertificate("rootCA", CACertificates.TEST_ROOT_CA).withCertificate("idpCA", CACertificates.TEST_IDP_CA).build();
+    private static final KeyStoreResource hubTrustStore = KeyStoreResourceBuilder.aKeyStoreResource().withCertificate("rootCA", CACertificates.TEST_ROOT_CA).withCertificate("hubCA", CACertificates.TEST_CORE_CA).build();
+    private static final KeyStoreResource idpTrustStore = KeyStoreResourceBuilder.aKeyStoreResource().withCertificate("rootCA", CACertificates.TEST_ROOT_CA).withCertificate("idpCA", CACertificates.TEST_IDP_CA).build();
     private static final KeyStoreResource rpTrustStore = KeyStoreResourceBuilder.aKeyStoreResource().withCertificate("rootCA", CACertificates.TEST_ROOT_CA).withCertificate("interCA", CACertificates.TEST_CORE_CA).withCertificate("rpCA", CACertificates.TEST_RP_CA).build();
     private static final KeyStoreResource countryMetadataTrustStore = KeyStoreResourceBuilder.aKeyStoreResource().withCertificate("idpCA", CACertificates.TEST_IDP_CA).withCertificate("metadataCA", CACertificates.TEST_METADATA_CA).withCertificate("rootCA", CACertificates.TEST_ROOT_CA).build();
 
@@ -103,13 +104,15 @@ public class SamlEngineAppRule extends DropwizardAppRule<SamlEngineConfiguration
                 config("secondaryPrivateEncryptionKeyConfiguration.key", TEST_PRIVATE_KEY),
                 config("secondaryPrivateEncryptionKeyConfiguration.type", "encoded"),
                 config("secondaryPublicEncryptionCert.x509", TEST_PUBLIC_CERT),
-                config("clientTrustStoreConfiguration.path", clientTrustStore.getAbsolutePath()),
-                config("clientTrustStoreConfiguration.password", clientTrustStore.getPassword()),
                 config("rpTrustStoreConfiguration.path", rpTrustStore.getAbsolutePath()),
                 config("rpTrustStoreConfiguration.password", rpTrustStore.getPassword()),
-                config("metadata.trustStorePath", metadataTrustStore.getAbsolutePath()),
-                config("metadata.trustStorePassword", metadataTrustStore.getPassword()),
-                config("metadata.uri", "http://localhost:" + verifyMetadataServer.getPort() + VERIFY_METADATA_PATH)
+                config("metadata.trustStore.path", metadataTrustStore.getAbsolutePath()),
+                config("metadata.trustStore.password", metadataTrustStore.getPassword()),
+                config("metadata.uri", "http://localhost:" + verifyMetadataServer.getPort() + VERIFY_METADATA_PATH),
+                config("metadata.hubTrustStore.path", hubTrustStore.getAbsolutePath()),
+                config("metadata.hubTrustStore.password", hubTrustStore.getPassword()),
+                config("metadata.idpTrustStore.path", idpTrustStore.getAbsolutePath()),
+                config("metadata.idpTrustStore.password", idpTrustStore.getPassword())
         ).collect(Collectors.toList());
 
         if (isCountryEnabled) {
@@ -118,6 +121,7 @@ public class SamlEngineAppRule extends DropwizardAppRule<SamlEngineConfiguration
                     config("country.saml.expectedDestination", "http://localhost:50300/SAML2/SSO/EidasResponse/POST"),
 
                     config("country.metadata.trustAnchorUri", "http://localhost:" + trustAnchorServer.getPort() + TRUST_ANCHOR_PATH),
+                    config("country.metadata.metadataSourceUri", "http://localhost:" + metadataAggregatorServer.getPort() + METADATA_AGGREGATOR_PATH),
                     config("country.metadata.trustStore.store", countryMetadataTrustStore.getAbsolutePath()),
                     config("country.metadata.trustStore.trustStorePassword", countryMetadataTrustStore.getPassword()),
                     config("country.metadata.minRefreshDelay", "6000"),
@@ -148,11 +152,10 @@ public class SamlEngineAppRule extends DropwizardAppRule<SamlEngineConfiguration
     @Override
     protected void before() {
         metadataTrustStore.create();
-        clientTrustStore.create();
+        hubTrustStore.create();
+        idpTrustStore.create();
         rpTrustStore.create();
         countryMetadataTrustStore.create();
-
-        countryEntityId = "http://localhost:" + metadataAggregatorServer.getPort() + METADATA_AGGREGATOR_PATH + COUNTRY_METADATA_PATH;
 
         try {
             InitializationService.initialize();
@@ -162,7 +165,12 @@ public class SamlEngineAppRule extends DropwizardAppRule<SamlEngineConfiguration
             verifyMetadataServer.register(VERIFY_METADATA_PATH, 200, Constants.APPLICATION_SAMLMETADATA_XML, new MetadataFactory().defaultMetadata());
 
             metadataAggregatorServer.reset();
-            metadataAggregatorServer.register(METADATA_AGGREGATOR_PATH + COUNTRY_METADATA_PATH, 200, Constants.APPLICATION_SAMLMETADATA_XML, testCountryMetadata);
+
+            metadataAggregatorServer.register(
+                    String.format("%s/%s", METADATA_AGGREGATOR_PATH, entityIdAsResource(COUNTRY_METADATA_PATH)),
+                    200,
+                    Constants.APPLICATION_SAMLMETADATA_XML,
+                    testCountryMetadata);
 
             trustAnchorServer.reset();
             trustAnchorServer.register(TRUST_ANCHOR_PATH, 200, MediaType.APPLICATION_OCTET_STREAM, buildTrustAnchorString());
@@ -176,15 +184,12 @@ public class SamlEngineAppRule extends DropwizardAppRule<SamlEngineConfiguration
     @Override
     protected void after() {
         metadataTrustStore.delete();
+        hubTrustStore.delete();
+        idpTrustStore.delete();
         rpTrustStore.delete();
-        clientTrustStore.delete();
         countryMetadataTrustStore.delete();
 
         super.after();
-    }
-
-    public String getCountryMetadataUri() {
-        return countryEntityId;
     }
 
     public URI getUri(String path) {
@@ -199,9 +204,9 @@ public class SamlEngineAppRule extends DropwizardAppRule<SamlEngineConfiguration
         PrivateKey trustAnchorKey = new PrivateKeyFactory().createPrivateKey(Base64.decodeBase64(TestCertificateStrings.METADATA_SIGNING_A_PRIVATE_KEY));
         X509Certificate trustAnchorCert = new X509CertificateFactory().createCertificate(TestCertificateStrings.METADATA_SIGNING_A_PUBLIC_CERT);
         Generator generator = new Generator(trustAnchorKey, trustAnchorCert);
-        HashMap<String, X509Certificate> trustAnchorMap = new HashMap<>();
+        HashMap<String, List<X509Certificate>> trustAnchorMap = new HashMap<>();
         X509Certificate metadataCACert = x509CertificateFactory.createCertificate(CACertificates.TEST_METADATA_CA.replace(BEGIN_CERT, "").replace(END_CERT, "").replace("\n", ""));
-        trustAnchorMap.put(countryEntityId, metadataCACert);
+        trustAnchorMap.put(COUNTRY_METADATA_PATH, Collections.singletonList(metadataCACert));
         return generator.generateFromMap(trustAnchorMap).serialize();
     }
 
@@ -221,11 +226,15 @@ public class SamlEngineAppRule extends DropwizardAppRule<SamlEngineConfiguration
                 .build();
 
         return EntityDescriptorBuilder.anEntityDescriptor()
-                .withEntityId(countryEntityId)
+                .withEntityId(COUNTRY_METADATA_PATH)
                 .withIdpSsoDescriptor(idpSsoDescriptor)
                 .setAddDefaultSpServiceDescriptor(false)
                 .withValidUntil(DateTime.now().plusWeeks(2))
                 .withSignature(signature)
                 .build();
+    }
+
+    public String getCountryMetadataUri() {
+        return COUNTRY_METADATA_PATH;
     }
 }

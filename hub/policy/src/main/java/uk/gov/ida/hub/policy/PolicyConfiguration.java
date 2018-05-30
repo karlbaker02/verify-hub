@@ -19,8 +19,6 @@ import java.net.URI;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class PolicyConfiguration extends Configuration implements RestfulClientConfiguration, ServiceNameConfiguration, InfinispanServiceConfiguration, AssertionLifetimeConfiguration {
 
-    protected PolicyConfiguration() {}
-
     @Valid
     @JsonProperty
     @NotNull
@@ -92,6 +90,8 @@ public class PolicyConfiguration extends Configuration implements RestfulClientC
     @Valid
     @JsonProperty
     public EventEmitterConfiguration eventEmitterConfiguration;
+
+    protected PolicyConfiguration() {}
 
     public URI getSamlSoapProxyUri() { return samlSoapProxyUri;  }
 

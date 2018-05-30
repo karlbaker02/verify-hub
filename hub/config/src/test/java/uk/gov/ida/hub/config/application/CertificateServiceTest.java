@@ -7,14 +7,11 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
 import uk.gov.ida.hub.config.data.ConfigEntityDataRepository;
-import uk.gov.ida.hub.config.domain.CertificateDetails;
-import uk.gov.ida.hub.config.domain.CertificateValidityChecker;
-import uk.gov.ida.hub.config.domain.MatchingServiceConfigEntityData;
-import uk.gov.ida.hub.config.domain.SignatureVerificationCertificate;
-import uk.gov.ida.hub.config.domain.TransactionConfigEntityData;
+import uk.gov.ida.hub.config.domain.*;
 import uk.gov.ida.hub.config.dto.FederationEntityType;
 import uk.gov.ida.hub.config.exceptions.CertificateDisabledException;
 import uk.gov.ida.hub.config.exceptions.NoCertificateFoundException;
+import uk.gov.ida.saml.core.test.TestCertificateStrings;
 
 import java.util.List;
 import java.util.Optional;
@@ -31,8 +28,8 @@ import static uk.gov.ida.hub.config.domain.builders.TransactionConfigEntityDataB
 public class CertificateServiceTest {
 
     private static final String ENTITY_ID = "id_that_exists";
-    private static final String CERT_ONE_X509 = "cert1";
-    private static final String CERT_TWO_X509 = "cert2";
+    private static final String CERT_ONE_X509 = TestCertificateStrings.UNCHAINED_PUBLIC_CERT;
+    private static final String CERT_TWO_X509 = TestCertificateStrings.HUB_TEST_PUBLIC_SIGNING_CERT;
     
     @Mock
     private ConfigEntityDataRepository<TransactionConfigEntityData> transactionDataSource;
@@ -181,8 +178,8 @@ public class CertificateServiceTest {
 
     @Test
     public void findsSignatureVerificationCertificates_WhenMatchingSignatureCertificatesExists() throws Exception {
-        SignatureVerificationCertificate sigCert1 = aSignatureVerificationCertificate().withX509(CERT_ONE_X509).build();
-        SignatureVerificationCertificate sigCert2 = aSignatureVerificationCertificate().withX509(CERT_TWO_X509).build();
+        SignatureVerificationCertificate sigCert1 = new SignatureVerificationCertificate(new X509CertificateConfiguration(CERT_ONE_X509));
+        SignatureVerificationCertificate sigCert2 = new SignatureVerificationCertificate(new X509CertificateConfiguration(CERT_TWO_X509));
 
         MatchingServiceConfigEntityData matchingServiceConfigEntityData = aMatchingServiceConfigEntityData()
                 .withEntityId(ENTITY_ID)

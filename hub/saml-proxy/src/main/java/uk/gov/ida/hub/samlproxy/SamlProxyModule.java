@@ -6,7 +6,6 @@ import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
 import com.google.inject.Scopes;
 import com.google.inject.TypeLiteral;
-import io.dropwizard.client.JerseyClientBuilder;
 import io.dropwizard.servlets.tasks.Task;
 import io.dropwizard.setup.Environment;
 import org.opensaml.saml.metadata.resolver.MetadataResolver;
@@ -70,6 +69,7 @@ import uk.gov.ida.saml.metadata.ExpiredCertificateMetadataFilter;
 import uk.gov.ida.saml.metadata.HubMetadataPublicKeyStore;
 import uk.gov.ida.saml.metadata.IdpMetadataPublicKeyStore;
 import uk.gov.ida.saml.metadata.MetadataHealthCheck;
+import uk.gov.ida.saml.metadata.MetadataResolverConfigBuilder;
 import uk.gov.ida.saml.metadata.MetadataResolverConfiguration;
 import uk.gov.ida.saml.metadata.domain.HubIdentityProviderMetadataDto;
 import uk.gov.ida.saml.metadata.factories.DropwizardMetadataResolverFactory;
@@ -83,10 +83,8 @@ import uk.gov.ida.saml.serializers.XmlObjectToBase64EncodedStringTransformer;
 import uk.gov.ida.saml.serializers.XmlObjectToElementTransformer;
 import uk.gov.ida.shared.utils.IpAddressResolver;
 import uk.gov.ida.shared.utils.logging.LevelLoggerFactory;
-import uk.gov.ida.truststore.ClientTrustStoreConfiguration;
 import uk.gov.ida.truststore.KeyStoreCache;
 import uk.gov.ida.truststore.KeyStoreLoader;
-import uk.gov.ida.truststore.KeyStoreProvider;
 import uk.gov.ida.truststore.TrustStoreConfiguration;
 
 import javax.inject.Named;
@@ -113,7 +111,6 @@ public class SamlProxyModule extends AbstractModule {
         bind(SigningKeyStore.class).to(AuthnRequestKeyStore.class);
         bind(Client.class).toProvider(DefaultClientProvider.class).in(Scopes.SINGLETON);
         bind(EventSinkProxy.class).to(EventSinkHttpProxy.class);
-        bind(KeyStore.class).toProvider(KeyStoreProvider.class).in(Scopes.SINGLETON);
         bind(ConfigServiceKeyStore.class).asEagerSingleton();
         bind(KeyStoreLoader.class).toInstance(new KeyStoreLoader());
         bind(ResponseMaxSizeValidator.class);
@@ -207,14 +204,15 @@ public class SamlProxyModule extends AbstractModule {
     @Singleton
     public Optional<EidasMetadataResolverRepository> getEidasMetadataResolverRepository(Environment environment, SamlProxyConfiguration configuration){
         if (configuration.isEidasEnabled()){
-
-            environment = environment;
             EidasMetadataConfiguration eidasMetadataConfiguration = configuration.getCountryConfiguration().get().getMetadataConfiguration();
 
             URI uri = eidasMetadataConfiguration.getTrustAnchorUri();
-            Client client = new JerseyClientBuilder(environment)
-                    .using(eidasMetadataConfiguration.getJerseyClientConfiguration())
-                    .build(eidasMetadataConfiguration.getJerseyClientName());
+
+            Client client = new ClientProvider(
+                    environment,
+                    eidasMetadataConfiguration.getJerseyClientConfiguration(),
+                    true,
+                    eidasMetadataConfiguration.getJerseyClientName()).get();
 
             KeyStore keystore = eidasMetadataConfiguration.getTrustStore();
 
@@ -222,12 +220,14 @@ public class SamlProxyModule extends AbstractModule {
 
             EidasMetadataResolverRepository metadataResolverRepository = new EidasMetadataResolverRepository(
                     trustAnchorResolver,
-                    environment,
                     eidasMetadataConfiguration,
                     new DropwizardMetadataResolverFactory(),
                     new Timer(),
-                    new MetadataSignatureTrustEngineFactory()
+                    new MetadataSignatureTrustEngineFactory(),
+                    new MetadataResolverConfigBuilder(),
+                    client
             );
+
             registerEidasMetadataRefreshTask(environment, metadataResolverRepository,  "eidas-metadata");
             return Optional.of(metadataResolverRepository);
         }
@@ -389,12 +389,6 @@ public class SamlProxyModule extends AbstractModule {
     @Policy
     public URI policyUri(SamlProxyConfiguration samlProxyConfiguration) {
         return samlProxyConfiguration.getPolicyUri();
-    }
-
-    @Provides
-    @Singleton
-    public ClientTrustStoreConfiguration clientTrustStoreConfiguration(SamlProxyConfiguration configuration) {
-        return configuration.getClientTrustStoreConfiguration();
     }
 
     @Provides

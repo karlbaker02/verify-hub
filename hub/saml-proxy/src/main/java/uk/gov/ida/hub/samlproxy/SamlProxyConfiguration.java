@@ -12,7 +12,7 @@ import uk.gov.ida.hub.samlproxy.config.CountryConfiguration;
 import uk.gov.ida.hub.samlproxy.config.SamlConfiguration;
 import uk.gov.ida.restclient.RestfulClientConfiguration;
 import uk.gov.ida.saml.metadata.MetadataResolverConfiguration;
-import uk.gov.ida.saml.metadata.TrustStorePathMetadataConfiguration;
+import uk.gov.ida.saml.metadata.MultiTrustStoresBackedMetadataConfiguration;
 import uk.gov.ida.truststore.ClientTrustStoreConfiguration;
 import uk.gov.ida.truststore.TrustStoreConfiguration;
 
@@ -44,7 +44,7 @@ public class SamlProxyConfiguration extends Configuration implements RestfulClie
     @NotNull
     @Valid
     @JsonProperty
-    protected TrustStorePathMetadataConfiguration metadata;
+    protected MultiTrustStoresBackedMetadataConfiguration metadata;
 
     @Valid
     @NotNull
@@ -80,11 +80,6 @@ public class SamlProxyConfiguration extends Configuration implements RestfulClie
     @NotNull
     @JsonProperty
     protected URI configUri;
-
-    @Valid
-    @NotNull
-    @JsonProperty
-    protected ClientTrustStoreConfiguration clientTrustStoreConfiguration;
 
     @Valid
     @NotNull
@@ -139,11 +134,6 @@ public class SamlProxyConfiguration extends Configuration implements RestfulClie
     @Override
     public String getServiceName() {
         return serviceInfo.getName();
-    }
-
-    @Override
-    public ClientTrustStoreConfiguration getClientTrustStoreConfiguration() {
-        return this.clientTrustStoreConfiguration;
     }
 
     @Override

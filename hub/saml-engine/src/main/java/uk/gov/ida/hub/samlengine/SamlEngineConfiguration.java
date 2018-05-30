@@ -14,7 +14,7 @@ import uk.gov.ida.restclient.RestfulClientConfiguration;
 import uk.gov.ida.saml.hub.configuration.SamlAuthnRequestValidityDurationConfiguration;
 import uk.gov.ida.saml.hub.configuration.SamlDuplicateRequestValidationConfiguration;
 import uk.gov.ida.saml.metadata.MetadataResolverConfiguration;
-import uk.gov.ida.saml.metadata.TrustStorePathMetadataConfiguration;
+import uk.gov.ida.saml.metadata.MultiTrustStoresBackedMetadataConfiguration;
 import uk.gov.ida.shared.dropwizard.infinispan.config.InfinispanConfiguration;
 import uk.gov.ida.shared.dropwizard.infinispan.config.InfinispanServiceConfiguration;
 import uk.gov.ida.truststore.ClientTrustStoreConfiguration;
@@ -75,7 +75,7 @@ public class SamlEngineConfiguration extends Configuration implements RestfulCli
     @NotNull
     @Valid
     @JsonProperty
-    protected TrustStorePathMetadataConfiguration metadata;
+    protected MultiTrustStoresBackedMetadataConfiguration metadata;
 
     @Valid
     @JsonProperty
@@ -100,11 +100,6 @@ public class SamlEngineConfiguration extends Configuration implements RestfulCli
     @NotNull
     @JsonProperty
     protected URI configUri;
-
-    @Valid
-    @NotNull
-    @JsonProperty
-    protected ClientTrustStoreConfiguration clientTrustStoreConfiguration;
 
     @Valid
     @NotNull
@@ -176,11 +171,6 @@ public class SamlEngineConfiguration extends Configuration implements RestfulCli
     @Override
     public String getServiceName() {
         return serviceInfo.getName();
-    }
-
-    @Override
-    public ClientTrustStoreConfiguration getClientTrustStoreConfiguration() {
-        return this.clientTrustStoreConfiguration;
     }
 
     @Override

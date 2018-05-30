@@ -58,10 +58,6 @@ policyUri: ${POLICY_URI:-http://localhost:50110}
 serviceInfo:
   name: saml-proxy
 
-clientTrustStoreConfiguration:
-  path: ${IDP_TRUSTSTORE_PATH}
-  password: ${IDP_TRUSTSTORE_PASSWORD:-marshmallow}
-
 rpTrustStoreConfiguration:
   path: ${RP_TRUSTSTORE_PATH}
   password: ${RP_TRUSTSTORE_PASSWORD:-marshmallow}
@@ -72,6 +68,15 @@ metadata:
   uri: ${METADATA_URI:-http://localhost:55000/metadata.xml}
   trustStorePath: ${METADATA_TRUSTSTORE_PATH}
   trustStorePassword: ${METADATA_TRUSTSTORE_PASSWORD:-marshmallow}
+  trustStore:
+    path: ${METADATA_TRUSTSTORE_PATH}
+    password: ${METADATA_TRUSTSTORE_PASSWORD:-marshmallow}
+  hubTrustStore:
+    path: ${HUB_FEDERATION_TRUSTSTORE_PATH}
+    password: ${HUB_FEDERATION_TRUSTSTORE_PASSWORD:-marshmallow}
+  idpTrustStore:
+    path: ${IDP_FEDERATION_TRUSTSTORE_PATH}
+    password: ${IDP_FEDERATION_TRUSTSTORE_PASSWORD:-marshmallow}
   minRefreshDelay: 60000
   maxRefreshDelay: 600000
   expectedEntityId: ${SAML_ENTITY_ID:-http://dev-hub.local}

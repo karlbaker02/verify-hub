@@ -7,7 +7,6 @@ import com.google.common.collect.ImmutableSet;
 import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
 import com.google.inject.TypeLiteral;
-import io.dropwizard.client.JerseyClientBuilder;
 import io.dropwizard.servlets.tasks.Task;
 import io.dropwizard.setup.Environment;
 import org.joda.time.DateTime;
@@ -113,12 +112,12 @@ import uk.gov.ida.saml.metadata.EidasTrustAnchorHealthCheck;
 import uk.gov.ida.saml.metadata.EidasTrustAnchorResolver;
 import uk.gov.ida.saml.metadata.ExpiredCertificateMetadataFilter;
 import uk.gov.ida.saml.metadata.MetadataHealthCheck;
+import uk.gov.ida.saml.metadata.MetadataResolverConfigBuilder;
 import uk.gov.ida.saml.metadata.factories.DropwizardMetadataResolverFactory;
 import uk.gov.ida.saml.metadata.factories.MetadataSignatureTrustEngineFactory;
 import uk.gov.ida.saml.security.AssertionDecrypter;
 import uk.gov.ida.saml.security.DecrypterFactory;
 import uk.gov.ida.saml.security.EncrypterFactory;
-import uk.gov.ida.saml.security.EncryptionCredentialFactory;
 import uk.gov.ida.saml.security.EncryptionKeyStore;
 import uk.gov.ida.saml.security.EntityToEncryptForLocator;
 import uk.gov.ida.saml.security.IdaKeyStore;
@@ -131,7 +130,6 @@ import uk.gov.ida.saml.security.validators.issuer.IssuerValidator;
 import uk.gov.ida.saml.serializers.XmlObjectToBase64EncodedStringTransformer;
 import uk.gov.ida.shared.dropwizard.infinispan.util.InfinispanCacheManager;
 import uk.gov.ida.shared.utils.logging.LevelLoggerFactory;
-import uk.gov.ida.truststore.ClientTrustStoreConfiguration;
 import uk.gov.ida.truststore.TrustStoreConfiguration;
 
 import javax.inject.Named;
@@ -211,18 +209,16 @@ public class SamlEngineModule extends AbstractModule {
         EntityToEncryptForLocator entityToEncryptForLocator,
         SignatureAlgorithm signatureAlgorithm,
         DigestAlgorithm digestAlgorithm,
-        @Named("HubEidasEntityId") Optional<String> hubEidasEntityId
+        @Named("HubEntityId") String hubEntityId
     ) {
-        if (!hubEidasEntityId.isPresent()) {
-            throw new InvalidConfigurationException(EIDAS_HUB_ENTITY_ID_NOT_CONFIGURED_ERROR_MESSAGE);
-        }
+
         return hubTransformersFactory.getEidasMatchingServiceRequestToElementTransformer(
             keyStore,
             encryptionKeyStore,
             entityToEncryptForLocator,
             signatureAlgorithm,
             digestAlgorithm,
-            hubEidasEntityId.get());
+            hubEntityId);
     }
 
     @Provides
@@ -326,13 +322,16 @@ public class SamlEngineModule extends AbstractModule {
     @Singleton
     private Optional<EidasMetadataResolverRepository> getCountryMetadataResolverRepository(Environment environment, SamlEngineConfiguration configuration){
         if (configuration.isEidasEnabled()) {
+            EidasMetadataConfiguration eidasMetadataConfiguration = configuration.getCountryConfiguration().get().getMetadataConfiguration();
+            URI trustAnchorUri = eidasMetadataConfiguration.getTrustAnchorUri();
 
-            EidasMetadataConfiguration metadataConfiguration = configuration.getCountryConfiguration().get().getMetadataConfiguration();
-            URI trustAnchorUri = metadataConfiguration.getTrustAnchorUri();
-            Client client = new JerseyClientBuilder(environment)
-                    .using(metadataConfiguration.getJerseyClientConfiguration())
-                    .build(metadataConfiguration.getJerseyClientName());
-            KeyStore trustStore = metadataConfiguration.getTrustStore();
+            Client client = new ClientProvider(
+                    environment,
+                    eidasMetadataConfiguration.getJerseyClientConfiguration(),
+                    true,
+                    eidasMetadataConfiguration.getJerseyClientName()).get();
+
+            KeyStore trustStore = eidasMetadataConfiguration.getTrustStore();
 
             EidasTrustAnchorResolver trustAnchorResolver = new EidasTrustAnchorResolver(
                     trustAnchorUri,
@@ -341,11 +340,12 @@ public class SamlEngineModule extends AbstractModule {
 
             EidasMetadataResolverRepository eidasMetadataResolverRepository = new EidasMetadataResolverRepository(
                     trustAnchorResolver,
-                    environment,
-                    metadataConfiguration,
+                    eidasMetadataConfiguration,
                     new DropwizardMetadataResolverFactory(),
                     new Timer(),
-                    new MetadataSignatureTrustEngineFactory());
+                    new MetadataSignatureTrustEngineFactory(),
+                    new MetadataResolverConfigBuilder(),
+                    client);
 
             registerEidasMetadataRefreshTask(environment, eidasMetadataResolverRepository, "eidas-metadata");
             return Optional.of(eidasMetadataResolverRepository);
@@ -468,12 +468,6 @@ public class SamlEngineModule extends AbstractModule {
     @Singleton
     private ServiceInfoConfiguration serviceInfoConfiguration(SamlEngineConfiguration configuration) {
         return configuration.getServiceInfo();
-    }
-
-    @Provides
-    @Singleton
-    private ClientTrustStoreConfiguration clientTrustStoreConfiguration(SamlEngineConfiguration configuration) {
-        return configuration.getClientTrustStoreConfiguration();
     }
 
     @Provides

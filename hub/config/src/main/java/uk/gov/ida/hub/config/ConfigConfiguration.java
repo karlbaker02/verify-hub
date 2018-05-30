@@ -15,8 +15,6 @@ import javax.validation.constraints.NotNull;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class ConfigConfiguration extends Configuration implements TrustStoreConfiguration, ServiceNameConfiguration {
 
-    protected ConfigConfiguration() {}
-
     @Valid
     @NotNull
     @JsonProperty
@@ -47,6 +45,8 @@ public class ConfigConfiguration extends Configuration implements TrustStoreConf
     @JsonProperty
     protected Duration certificateWarningPeriod = Duration.days(30);
 
+    protected ConfigConfiguration() {}
+
     public String getDataDirectory() {
         return rootDataDirectory;
     }
@@ -64,7 +64,6 @@ public class ConfigConfiguration extends Configuration implements TrustStoreConf
         return serviceInfo.getName();
     }
 
-    @Override
     public ClientTrustStoreConfiguration getClientTrustStoreConfiguration() {
         return this.clientTrustStoreConfiguration;
     }

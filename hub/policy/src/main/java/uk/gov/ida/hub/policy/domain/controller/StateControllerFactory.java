@@ -16,6 +16,7 @@ import uk.gov.ida.hub.policy.domain.state.Cycle3DataInputCancelledState;
 import uk.gov.ida.hub.policy.domain.state.Cycle3MatchRequestSentState;
 import uk.gov.ida.hub.policy.domain.state.EidasAwaitingCycle3DataState;
 import uk.gov.ida.hub.policy.domain.state.EidasCycle0And1MatchRequestSentState;
+import uk.gov.ida.hub.policy.domain.state.EidasCycle3MatchRequestSentState;
 import uk.gov.ida.hub.policy.domain.state.EidasSuccessfulMatchState;
 import uk.gov.ida.hub.policy.domain.state.FraudEventDetectedState;
 import uk.gov.ida.hub.policy.domain.state.IdpSelectedState;
@@ -103,7 +104,8 @@ public class StateControllerFactory {
                         new LevelOfAssuranceValidator(),
                         injector.getInstance(ResponseFromHubFactory.class),
                         injector.getInstance(AttributeQueryService.class),
-                        injector.getInstance(TransactionsConfigProxy.class));
+                        injector.getInstance(TransactionsConfigProxy.class),
+                        injector.getInstance(MatchingServiceConfigProxy.class));
 
             case SUCCESSFUL_MATCH:
                 return new SuccessfulMatchStateController(
@@ -163,6 +165,18 @@ public class StateControllerFactory {
                         injector.getInstance(AssertionRestrictionsFactory.class),
                         injector.getInstance(AttributeQueryService.class));
 
+            case EIDAS_CYCLE_3_MATCH_REQUEST_SENT:
+                return new EidasCycle3MatchRequestSentStateController(
+                        (EidasCycle3MatchRequestSentState) state,
+                        injector.getInstance(HubEventLogger.class),
+                        stateTransitionAction,
+                        injector.getInstance(PolicyConfiguration.class),
+                        new LevelOfAssuranceValidator(),
+                        injector.getInstance(ResponseFromHubFactory.class),
+                        injector.getInstance(AttributeQueryService.class),
+                        injector.getInstance(TransactionsConfigProxy.class),
+                        injector.getInstance(MatchingServiceConfigProxy.class));
+
             case TIMEOUT:
                 return new TimeoutStateController(
                         (TimeoutState) state,
@@ -181,7 +195,9 @@ public class StateControllerFactory {
                         injector.getInstance(PolicyConfiguration.class),
                         new LevelOfAssuranceValidator(),
                         injector.getInstance(ResponseFromHubFactory.class),
-                        injector.getInstance(AttributeQueryService.class));
+                        injector.getInstance(AttributeQueryService.class),
+                        injector.getInstance(TransactionsConfigProxy.class),
+                        injector.getInstance(MatchingServiceConfigProxy.class));
 
             case AUTHN_FAILED_ERROR:
                 return new AuthnFailedErrorStateController(

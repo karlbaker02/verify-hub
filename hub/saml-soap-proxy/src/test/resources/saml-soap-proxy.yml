@@ -79,10 +79,6 @@ matchingServiceExecutorConfiguration:
   maxPoolSize: 10
   keepAliveDuration: 10s
 
-clientTrustStoreConfiguration:
-  path: ${IDP_TRUSTSTORE_PATH}
-  password: ${IDP_TRUSTSTORE_PASSWORD}
-
 rpTrustStoreConfiguration:
   path: ${RP_TRUSTSTORE_PATH}
   password: ${RP_TRUSTSTORE_PASSWORD}
@@ -91,6 +87,15 @@ metadata:
   uri: ${METADATA_URI}
   trustStorePath: ${METADATA_TRUSTSTORE_PATH}
   trustStorePassword: ${METADATA_TRUSTSTORE_PASSWORD}
+  trustStore:
+    path: ${METADATA_TRUSTSTORE_PATH}
+    password: ${METADATA_TRUSTSTORE_PASSWORD}
+  hubTrustStore:
+    path: ${HUB_FEDERATION_TRUSTSTORE_PATH}
+    password: ${HUB_FEDERATION_TRUSTSTORE_PASSWORD}
+  idpTrustStore:
+    path: ${IDP_FEDERATION_TRUSTSTORE_PATH}
+    password: ${IDP_FEDERATION_TRUSTSTORE_PASSWORD}
   minRefreshDelay: 60000
   maxRefreshDelay: 600000
   expectedEntityId: ${SAML_ENTITY_ID}

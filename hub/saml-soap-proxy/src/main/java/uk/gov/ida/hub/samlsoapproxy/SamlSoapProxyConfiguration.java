@@ -9,7 +9,7 @@ import uk.gov.ida.configuration.ServiceNameConfiguration;
 import uk.gov.ida.hub.samlsoapproxy.config.SamlConfiguration;
 import uk.gov.ida.restclient.RestfulClientConfiguration;
 import uk.gov.ida.saml.metadata.MetadataResolverConfiguration;
-import uk.gov.ida.saml.metadata.TrustStorePathMetadataConfiguration;
+import uk.gov.ida.saml.metadata.MultiTrustStoresBackedMetadataConfiguration;
 import uk.gov.ida.truststore.ClientTrustStoreConfiguration;
 import uk.gov.ida.truststore.TrustStoreConfiguration;
 
@@ -51,7 +51,7 @@ public class SamlSoapProxyConfiguration extends Configuration implements Restful
     @Valid
     @NotNull
     @JsonProperty
-    protected TrustStorePathMetadataConfiguration metadata;
+    protected MultiTrustStoresBackedMetadataConfiguration metadata;
 
     @Valid
     @NotNull
@@ -81,11 +81,6 @@ public class SamlSoapProxyConfiguration extends Configuration implements Restful
     @Valid
     @JsonProperty
     protected URI configUri;
-
-    @Valid
-    @NotNull
-    @JsonProperty
-    protected ClientTrustStoreConfiguration clientTrustStoreConfiguration;
 
     @Valid
     @NotNull
@@ -144,11 +139,6 @@ public class SamlSoapProxyConfiguration extends Configuration implements Restful
     @Override
     public String getServiceName() {
         return serviceInfo.getName();
-    }
-
-    @Override
-    public ClientTrustStoreConfiguration getClientTrustStoreConfiguration() {
-        return this.clientTrustStoreConfiguration;
     }
 
     @Override
