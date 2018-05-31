@@ -11,7 +11,8 @@ public interface State {
 
     SessionId getSessionId();
 
-    @SuppressWarnings("unused") // marker method
+    @SuppressWarnings("unused")
+        // marker method
     void doNotDirectlyImplementThisInterface();
 
     String getRequestIssuerEntityId();
@@ -22,7 +23,7 @@ public interface State {
 
     boolean getTransactionSupportsEidas();
 
-    default StateTNG getThisState(){
+    default StateTNG getThisState() {
         throw new NotImplementedException("No uk.gov.ida.hub.policy.statemachine.StateTNG set.");
     }
 
