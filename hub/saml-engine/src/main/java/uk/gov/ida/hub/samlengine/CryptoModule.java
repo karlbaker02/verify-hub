@@ -7,7 +7,7 @@ import com.google.inject.name.Names;
 import org.opensaml.xmlsec.algorithm.DigestAlgorithm;
 import org.opensaml.xmlsec.algorithm.SignatureAlgorithm;
 import org.opensaml.xmlsec.algorithm.descriptors.DigestSHA256;
-import org.opensaml.xmlsec.algorithm.descriptors.SignatureRSASHA1;
+import org.opensaml.xmlsec.algorithm.descriptors.SignatureRSASHA256;
 import uk.gov.ida.common.shared.security.X509CertificateFactory;
 import uk.gov.ida.common.shared.security.verification.CertificateChainValidator;
 import uk.gov.ida.common.shared.security.verification.PKIXParametersProvider;
@@ -44,7 +44,7 @@ public class CryptoModule extends AbstractModule {
         bind(KeyStoreLoader.class).toInstance(new KeyStoreLoader());
         bind(AssertionBlobEncrypter.class);
         bind(EncrypterFactory.class).toInstance(new EncrypterFactory());
-        bind(SignatureAlgorithm.class).toInstance(new SignatureRSASHA1());
+        bind(SignatureAlgorithm.class).toInstance(new SignatureRSASHA256());
         bind(DigestAlgorithm.class).toInstance(new DigestSHA256());
     }
 
