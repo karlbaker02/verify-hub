@@ -36,7 +36,7 @@ def dependencyVersions = [
             ida_test_utils:"2.0.0-44",
             opensaml:"$opensaml_version",
             dev_pki: '1.1.0-34',
-            saml_libs:"$opensaml_version-153",
+            saml_libs:"$opensaml_version-154",
         ]
 
 subprojects {
@@ -54,6 +54,7 @@ subprojects {
         }
         else {
           maven { url 'https://artifactory.ida.digital.cabinet-office.gov.uk/artifactory/whitelisted-repos' }
+          mavenLocal()
         }
     }
 
