@@ -2,7 +2,7 @@ package uk.gov.ida.hub.policy.domain.state;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.google.common.base.Optional;
+import java.util.Optional;
 import org.joda.time.DateTime;
 import uk.gov.ida.hub.policy.domain.AbstractState;
 import uk.gov.ida.hub.policy.domain.SessionId;
@@ -38,12 +38,12 @@ public class AuthnFailedErrorState extends AbstractState implements IdpSelecting
 
     @Override
     public Optional<Boolean> getForceAuthentication() {
-        return Optional.fromNullable(forceAuthentication);
+        return Optional.ofNullable(forceAuthentication);
     }
 
     @Override
     public Optional<String> getRelayState() {
-        return Optional.fromNullable(relayState);
+        return Optional.ofNullable(relayState);
     }
 
     public String getIdpEntityId() {

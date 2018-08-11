@@ -1,6 +1,6 @@
 package uk.gov.ida.integrationtest.hub.policy.rest;
 
-import com.google.common.base.Optional;
+import java.util.Optional;
 import org.joda.time.DateTime;
 import uk.gov.ida.hub.policy.domain.LevelOfAssurance;
 import uk.gov.ida.hub.policy.domain.PersistentId;
@@ -21,7 +21,7 @@ public final class EidasCycle3DTO {
     private DateTime sessionExpiryTimestamp = DateTime.now().plusMinutes(10);
     private String requestIssuerEntityId = "requestIssuerEntityId";
     private String matchingServiceAssertion = "matchingServiceAssertion";
-    private Optional<String> relayState = Optional.fromNullable("relayState");
+    private Optional<String> relayState = Optional.ofNullable("relayState");
     private URI assertionConsumerServiceUri = URI.create("http://assertionconsumeruri");
     private String matchingServiceAdapterEntityId = "matchingServiceAdapterEntityId";
     private PersistentId persistentId = new PersistentId("nameId");

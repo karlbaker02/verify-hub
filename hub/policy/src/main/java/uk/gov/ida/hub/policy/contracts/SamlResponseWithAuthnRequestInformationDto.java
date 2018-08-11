@@ -1,6 +1,6 @@
 package uk.gov.ida.hub.policy.contracts;
 
-import com.google.common.base.Optional;
+import java.util.Optional;
 
 import java.net.URI;
 

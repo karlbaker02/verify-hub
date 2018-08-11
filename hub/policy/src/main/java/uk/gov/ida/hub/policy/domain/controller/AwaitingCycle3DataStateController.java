@@ -1,6 +1,6 @@
 package uk.gov.ida.hub.policy.domain.controller;
 
-import com.google.common.base.Optional;
+import java.util.Optional;
 import org.joda.time.DateTime;
 import uk.gov.ida.hub.policy.PolicyConfiguration;
 import uk.gov.ida.hub.policy.contracts.AttributeQueryRequestDto;
@@ -55,7 +55,7 @@ public class AwaitingCycle3DataStateController extends AbstractAwaitingCycle3Dat
             getState().getMatchingServiceEntityId(),
             DateTime.now().plus(getPolicyConfiguration().getMatchingServiceResponseWaitPeriod()),
             getState().getLevelOfAssurance(),
-            Optional.absent(),
+            Optional.empty(),
             getState().getPersistentId(),
             getAssertionRestrictionsFactory().getAssertionExpiry(),
             matchingServiceAdapterUri,
@@ -82,7 +82,7 @@ public class AwaitingCycle3DataStateController extends AbstractAwaitingCycle3Dat
             getState().getSessionId(),
             getState().getTransactionSupportsEidas(),
             getState().getIdentityProviderEntityId(),
-            getState().getRelayState().orNull(),
+            getState().getRelayState().orElse(null),
             getState().getLevelOfAssurance(),
             getState().isRegistering(),
             getState().getMatchingServiceEntityId(),

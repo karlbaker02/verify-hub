@@ -1,23 +1,23 @@
 package uk.gov.ida.hub.policy.builder.domain;
 
-import com.google.common.base.Optional;
 import org.joda.time.DateTime;
 import uk.gov.ida.hub.policy.domain.ReceivedAuthnRequest;
 
 import java.net.URI;
+import java.util.Optional;
 import java.util.UUID;
 
-import static com.google.common.base.Optional.absent;
-import static com.google.common.base.Optional.fromNullable;
+import static java.util.Optional.empty;
+import static java.util.Optional.ofNullable;
 
 public class ReceivedAuthnRequestBuilder {
 
     private String id = UUID.randomUUID().toString();
     private String issuer = "issuer_id";
     private DateTime issueInstant = DateTime.now();
-    private Optional<Boolean> forceAuthentication = absent();
+    private Optional<Boolean> forceAuthentication = empty();
     private URI assertionConsumerServiceUri = null;
-    private Optional<String> relayState = absent();
+    private Optional<String> relayState = empty();
     private String principalIpAddress = "some-principal-ip-address";
 
     public static ReceivedAuthnRequestBuilder aReceivedAuthnRequest() {
@@ -57,7 +57,7 @@ public class ReceivedAuthnRequestBuilder {
     }
 
     public ReceivedAuthnRequestBuilder withRelayState(String relayState) {
-        this.relayState = fromNullable(relayState);
+        this.relayState = ofNullable(relayState);
         return this;
     }
 

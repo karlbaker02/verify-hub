@@ -2,7 +2,6 @@ package uk.gov.ida.hub.policy.domain.state;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.google.common.base.Optional;
 import org.joda.time.DateTime;
 import uk.gov.ida.hub.policy.domain.LevelOfAssurance;
 import uk.gov.ida.hub.policy.domain.PersistentId;
@@ -10,6 +9,7 @@ import uk.gov.ida.hub.policy.domain.SessionId;
 
 import java.io.Serializable;
 import java.net.URI;
+import java.util.Optional;
 
 public class AwaitingCycle3DataState extends AbstractAwaitingCycle3DataState implements ResponseProcessingState, Serializable {
 
@@ -45,7 +45,7 @@ public class AwaitingCycle3DataState extends AbstractAwaitingCycle3DataState imp
                 transactionSupportsEidas,
                 identityProviderEntityId,
                 matchingServiceEntityId,
-                Optional.fromNullable(relayState),
+                Optional.ofNullable(relayState),
                 persistentId,
                 levelOfAssurance);
 

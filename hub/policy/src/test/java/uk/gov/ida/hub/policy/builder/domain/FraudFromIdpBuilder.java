@@ -1,9 +1,10 @@
 package uk.gov.ida.hub.policy.builder.domain;
 
-import com.google.common.base.Optional;
 import uk.gov.ida.hub.policy.domain.FraudDetectedDetails;
 import uk.gov.ida.hub.policy.domain.FraudFromIdp;
 import uk.gov.ida.hub.policy.domain.PersistentId;
+
+import java.util.Optional;
 
 import static uk.gov.ida.hub.policy.builder.domain.FraudDetectedDetailsBuilder.aFraudDetectedDetails;
 import static uk.gov.ida.hub.policy.builder.domain.PersistentIdBuilder.aPersistentId;
@@ -14,7 +15,7 @@ public class FraudFromIdpBuilder {
     private String principalIpAddressAsSeenByHub = "principal ip address as seen by hub";
     private PersistentId persistentId = aPersistentId().build();
     private FraudDetectedDetails fraudDetectedDetails = aFraudDetectedDetails().build();
-    private Optional<String> principalIpAddressAsSeenByIdp = Optional.absent();
+    private Optional<String> principalIpAddressAsSeenByIdp = Optional.empty();
 
     public static FraudFromIdpBuilder aFraudFromIdp() {
         return new FraudFromIdpBuilder();
@@ -41,7 +42,7 @@ public class FraudFromIdpBuilder {
     }
 
     public FraudFromIdpBuilder withPrincipalIpAddressSeenByIdp(String principalIpAddressAsSeenByIdp) {
-        this.principalIpAddressAsSeenByIdp = Optional.fromNullable(principalIpAddressAsSeenByIdp);
+        this.principalIpAddressAsSeenByIdp = Optional.ofNullable(principalIpAddressAsSeenByIdp);
         return this;
     }
 }

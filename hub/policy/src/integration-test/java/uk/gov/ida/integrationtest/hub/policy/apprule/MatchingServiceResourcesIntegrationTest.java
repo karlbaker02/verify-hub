@@ -1,7 +1,7 @@
 package uk.gov.ida.integrationtest.hub.policy.apprule;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.google.common.base.Optional;
+import java.util.Optional;
 import com.google.common.collect.ImmutableList;
 import helpers.JerseyClientConfigurationBuilder;
 import io.dropwizard.client.JerseyClientBuilder;
@@ -499,8 +499,8 @@ public class MatchingServiceResourcesIntegrationTest {
                 new InboundResponseFromMatchingServiceDto(MatchingServiceIdaStatus.NoMatchingServiceMatchFromMatchingService,
                         translatedAuthnRequest.getId(),
                         msaEntityId,
-                        Optional.<String>absent(),
-                        Optional.<LevelOfAssurance>absent());
+                        Optional.<String>empty(),
+                        Optional.<LevelOfAssurance>empty());
         samlEngineStub.setupStubForAttributeResponseTranslate(inboundResponseFromMatchingServiceDto);
         List<UserAccountCreationAttribute> userAccountCreationAttributes = ImmutableList.of(UserAccountCreationAttribute.CURRENT_ADDRESS);
         configStub.setUpStubForUserAccountCreation(rpEntityId, userAccountCreationAttributes);
@@ -521,8 +521,8 @@ public class MatchingServiceResourcesIntegrationTest {
                 new InboundResponseFromMatchingServiceDto(MatchingServiceIdaStatus.NoMatchingServiceMatchFromMatchingService,
                         translatedAuthnRequest.getId(),
                         msaEntityId,
-                        Optional.<String>absent(),
-                        Optional.<LevelOfAssurance>absent());
+                        Optional.<String>empty(),
+                        Optional.<LevelOfAssurance>empty());
         samlEngineStub.setupStubForAttributeResponseTranslate(inboundResponseFromMatchingServiceDto);
         final String cycle3Attribute = configStub.setUpStubForEnteringAwaitingCycle3DataState(rpEntityId);
 
@@ -538,8 +538,8 @@ public class MatchingServiceResourcesIntegrationTest {
                 new InboundResponseFromMatchingServiceDto(MatchingServiceIdaStatus.NoMatchingServiceMatchFromMatchingService,
                         translatedAuthnRequest.getId(),
                         msaEntityId,
-                        Optional.<String>absent(),
-                        Optional.<LevelOfAssurance>absent());
+                        Optional.<String>empty(),
+                        Optional.<LevelOfAssurance>empty());
         samlEngineStub.setupStubForAttributeResponseTranslate(inboundResponseFromMatchingServiceDto);
 
         configStub.setUpStubForCycle01NoMatchCycle3Disabled(rpEntityId);

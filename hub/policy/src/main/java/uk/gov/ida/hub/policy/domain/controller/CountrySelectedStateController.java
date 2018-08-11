@@ -91,7 +91,7 @@ public class CountrySelectedStateController implements StateController, ErrorRes
                 state.getLevelsOfAssurance(),
                 false,
                 state.getCountryEntityId(),
-                com.google.common.base.Optional.of(true),
+                java.util.Optional.of(true),
                 state.getSessionExpiryTimestamp(),
                 false,
                 countryDto.map(EidasCountryDto::getOverriddenSsoUrl).orElse(null));
@@ -131,7 +131,7 @@ public class CountrySelectedStateController implements StateController, ErrorRes
             state.getLevelsOfAssurance().get(0),
             state.getLevelsOfAssurance().get(state.getLevelsOfAssurance().size() - 1),
             dto.getLevelOfAssurance(),
-            com.google.common.base.Optional.absent(),
+            java.util.Optional.empty(),
             principalIpAddressAsSeenByHub);
 
         stateTransitionAction.transitionTo(createEidasCycle0And1MatchRequestSentState(dto, identityProviderEntityId));
@@ -148,7 +148,7 @@ public class CountrySelectedStateController implements StateController, ErrorRes
             new SessionId(state.getSessionId().getSessionId()),
             state.getTransactionSupportsEidas(),
             identityProviderEntityId,
-            state.getRelayState().orNull(),
+            state.getRelayState().orElse(null),
             dto.getLevelOfAssurance(),
             getMatchingServiceEntityId(),
             dto.getEncryptedIdentityAssertion(),

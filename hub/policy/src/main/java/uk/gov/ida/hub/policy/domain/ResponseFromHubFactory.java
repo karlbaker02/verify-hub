@@ -1,12 +1,12 @@
 package uk.gov.ida.hub.policy.domain;
 
-import com.google.common.base.Optional;
+import java.util.Optional;
 import uk.gov.ida.common.shared.security.IdGenerator;
 
 import javax.inject.Inject;
 import java.net.URI;
 
-import static com.google.common.base.Optional.fromNullable;
+import static java.util.Optional.ofNullable;
 
 public class ResponseFromHubFactory {
 
@@ -28,7 +28,7 @@ public class ResponseFromHubFactory {
                 idGenerator.getId(),
                 inResponseTo,
                 authnRequestIssuerEntityId,
-                fromNullable(matchingServiceAssertion),
+                ofNullable(matchingServiceAssertion),
                 relayState,
                 assertionConsumerServiceUri,
                 TransactionIdaStatus.Success
@@ -45,7 +45,7 @@ public class ResponseFromHubFactory {
                 idGenerator.getId(),
                 inResponseTo,
                 authnRequestIssuerEntityId,
-                Optional.<String>absent(),
+                Optional.<String>empty(),
                 relayState,
                 assertionConsumerServiceUri,
                 TransactionIdaStatus.NoAuthenticationContext
@@ -62,7 +62,7 @@ public class ResponseFromHubFactory {
                 idGenerator.getId(),
                 inResponseTo,
                 authnRequestIssuerEntityId,
-                Optional.<String>absent(),
+                Optional.<String>empty(),
                 relayState,
                 assertionConsumerServiceUri,
                 TransactionIdaStatus.NoMatchingServiceMatchFromHub
@@ -79,7 +79,7 @@ public class ResponseFromHubFactory {
                 idGenerator.getId(),
                 inResponseTo,
                 authnRequestIssuerEntityId,
-                Optional.<String>absent(),
+                Optional.<String>empty(),
                 relayState,
                 assertionConsumerServiceUri,
                 TransactionIdaStatus.AuthenticationFailed
@@ -96,7 +96,7 @@ public class ResponseFromHubFactory {
             idGenerator.getId(),
             requestId,
             requestIssuerId,
-            Optional.<String>absent(),
+            Optional.<String>empty(),
             relayState,
             assertionConsumerServiceUri,
             TransactionIdaStatus.RequesterError

@@ -1,20 +1,20 @@
 package uk.gov.ida.hub.policy.proxy;
 
-import com.google.common.base.Optional;
 import uk.gov.ida.hub.policy.contracts.SamlResponseWithAuthnRequestInformationDto;
 
 import java.net.URI;
+import java.util.Optional;
 import java.util.UUID;
 
-import static com.google.common.base.Optional.absent;
+import static java.util.Optional.empty;
 
 public class SamlResponseWithAuthnRequestInformationDtoBuilder {
 
     private String id = UUID.randomUUID().toString();
     private String issuer = UUID.randomUUID().toString();
-    private Optional<Boolean> forceAuthentication = absent();
+    private Optional<Boolean> forceAuthentication = empty();
     private Optional<Integer> assertionConsumerServiceIndex = Optional.of(1);
-    private Optional<URI> assertionConsumerServiceUrl = Optional.absent();
+    private Optional<URI> assertionConsumerServiceUrl = empty();
 
 
     public static SamlResponseWithAuthnRequestInformationDtoBuilder aSamlResponseWithAuthnRequestInformationDto() {
@@ -36,7 +36,7 @@ public class SamlResponseWithAuthnRequestInformationDtoBuilder {
     }
 
     public SamlResponseWithAuthnRequestInformationDtoBuilder withAssertionConsumerServiceUrl(URI uri) {
-        this.assertionConsumerServiceUrl = Optional.fromNullable(uri);
+        this.assertionConsumerServiceUrl = Optional.ofNullable(uri);
         return this;
     }
 

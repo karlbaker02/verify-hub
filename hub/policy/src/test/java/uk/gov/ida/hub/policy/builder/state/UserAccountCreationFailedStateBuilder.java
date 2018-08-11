@@ -1,6 +1,5 @@
 package uk.gov.ida.hub.policy.builder.state;
 
-import com.google.common.base.Optional;
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
 import uk.gov.ida.hub.policy.builder.domain.SessionIdBuilder;
@@ -8,6 +7,7 @@ import uk.gov.ida.hub.policy.domain.SessionId;
 import uk.gov.ida.hub.policy.domain.state.UserAccountCreationFailedState;
 
 import java.net.URI;
+import java.util.Optional;
 
 public class UserAccountCreationFailedStateBuilder {
 
@@ -28,7 +28,7 @@ public class UserAccountCreationFailedStateBuilder {
                 requestIssuerId,
                 sessionExpiryTimestamp,
                 assertionConsumerServiceUri,
-                Optional.absent(),
+                Optional.empty(),
                 sessionId,
                 transactionSupportsEidas
         );

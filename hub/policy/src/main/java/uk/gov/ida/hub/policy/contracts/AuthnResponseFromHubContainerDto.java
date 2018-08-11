@@ -1,6 +1,6 @@
 package uk.gov.ida.hub.policy.contracts;
 
-import com.google.common.base.Optional;
+import java.util.Optional;
 
 import java.net.URI;
 
@@ -8,7 +8,7 @@ public class AuthnResponseFromHubContainerDto {
 
     private String samlResponse;
     private URI postEndpoint;
-    private Optional<String> relayState = Optional.absent();
+    private Optional<String> relayState = Optional.empty();
     private String responseId;
 
     @SuppressWarnings("unused") //Needed for JAXB

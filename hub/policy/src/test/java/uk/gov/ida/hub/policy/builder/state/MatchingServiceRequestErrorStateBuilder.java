@@ -1,6 +1,5 @@
 package uk.gov.ida.hub.policy.builder.state;
 
-import com.google.common.base.Optional;
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
 import uk.gov.ida.hub.policy.builder.domain.SessionIdBuilder;
@@ -8,6 +7,7 @@ import uk.gov.ida.hub.policy.domain.SessionId;
 import uk.gov.ida.hub.policy.domain.state.MatchingServiceRequestErrorState;
 
 import java.net.URI;
+import java.util.Optional;
 
 public class MatchingServiceRequestErrorStateBuilder {
 
@@ -30,7 +30,7 @@ public class MatchingServiceRequestErrorStateBuilder {
                 sessionExpiryTimestamp,
                 assertionConsumerServiceUri,
                 identityProviderEntityId,
-                Optional.<String>absent(),
+                Optional.<String>empty(),
                 sessionId,
                 transactionSupportsEidas);
     }

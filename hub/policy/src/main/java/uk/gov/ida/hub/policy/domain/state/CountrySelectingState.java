@@ -1,6 +1,6 @@
 package uk.gov.ida.hub.policy.domain.state;
 
-import com.google.common.base.Optional;
+import java.util.Optional;
 import uk.gov.ida.hub.policy.domain.State;
 
 public interface CountrySelectingState extends State {

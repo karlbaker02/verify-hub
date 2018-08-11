@@ -2,7 +2,7 @@ package uk.gov.ida.hub.policy.domain.state;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.google.common.base.Optional;
+import java.util.Optional;
 import org.joda.time.DateTime;
 import uk.gov.ida.hub.policy.domain.LevelOfAssurance;
 import uk.gov.ida.hub.policy.domain.PersistentId;
@@ -40,7 +40,7 @@ public abstract class EidasMatchRequestSentState extends AbstractMatchRequestSen
                 sessionId,
                 transactionSupportsEidas,
                 identityProviderEntityId,
-                Optional.fromNullable(relayState),
+                Optional.ofNullable(relayState),
                 idpLevelOfAssurance,
                 matchingServiceAdapterEntityId
         );

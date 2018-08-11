@@ -1,6 +1,6 @@
 package uk.gov.ida.hub.policy.services;
 
-import com.google.common.base.Optional;
+import java.util.Optional;
 import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -103,7 +103,7 @@ public class AuthnResponseFromCountryService {
     }
 
     private void validateLoa(CountrySelectedStateController controller, InboundResponseFromCountry dto) {
-        java.util.Optional<LevelOfAssurance> loa = dto.getLevelOfAssurance().toJavaUtil();
+        java.util.Optional<LevelOfAssurance> loa = dto.getLevelOfAssurance();
         if (!loa.isPresent()) {
             throw StateProcessingValidationException.missingMandatoryAttribute(controller.getRequestId(), "levelOfAssurance");
         }
@@ -124,8 +124,8 @@ public class AuthnResponseFromCountryService {
             matchingServiceConfig.isOnboarding(),
             response.getLevelOfAssurance().get(),
             new PersistentId(response.getPersistentId().get()),
-            Optional.absent(),
-            Optional.absent(),
+            Optional.empty(),
+            Optional.empty(),
             response.getEncryptedIdentityAssertionBlob().get()
         );
     }

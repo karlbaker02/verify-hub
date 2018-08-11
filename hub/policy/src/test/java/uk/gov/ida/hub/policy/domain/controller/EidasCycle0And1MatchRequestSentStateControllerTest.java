@@ -1,6 +1,5 @@
 package uk.gov.ida.hub.policy.domain.controller;
 
-import com.google.common.base.Optional;
 import org.assertj.core.util.Lists;
 import org.junit.After;
 import org.junit.Before;
@@ -28,6 +27,7 @@ import uk.gov.ida.hub.policy.validators.LevelOfAssuranceValidator;
 import uk.gov.ida.shared.utils.datetime.DateTimeFreezer;
 
 import java.net.URI;
+import java.util.Optional;
 
 import static java.util.Arrays.asList;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -109,7 +109,7 @@ public class EidasCycle0And1MatchRequestSentStateControllerTest {
             state.getSessionExpiryTimestamp(),
             state.getIdentityProviderEntityId(),
             matchFromMatchingService.getMatchingServiceAssertion(),
-            state.getRelayState().orNull(),
+            state.getRelayState().orElse(null),
             state.getRequestIssuerEntityId(),
             state.getAssertionConsumerServiceUri(),
             state.getSessionId(),
@@ -154,7 +154,7 @@ public class EidasCycle0And1MatchRequestSentStateControllerTest {
     public void shouldReturnUserAccountCreationStateWhenUserAccountCreationIsEnabled() {
         URI userAccountCreationUri = URI.create("a-test-user-account-creation-uri");
 
-        when(transactionsConfigProxy.getMatchingProcess(state.getRequestIssuerEntityId())).thenReturn(new MatchingProcess(Optional.absent()));
+        when(transactionsConfigProxy.getMatchingProcess(state.getRequestIssuerEntityId())).thenReturn(new MatchingProcess(Optional.empty()));
         when(transactionsConfigProxy.getUserAccountCreationAttributes(state.getRequestIssuerEntityId())).thenReturn(asList(FIRST_NAME));
         when(matchingServiceConfigProxy.getMatchingService(anyString()))
                 .thenReturn(aMatchingServiceConfigEntityDataDto().withUserAccountCreationUri(userAccountCreationUri).build());
@@ -171,7 +171,7 @@ public class EidasCycle0And1MatchRequestSentStateControllerTest {
                 state.getSessionId(),
                 state.getTransactionSupportsEidas(),
                 state.getIdentityProviderEntityId(),
-                state.getRelayState().orNull(),
+                state.getRelayState().orElse(null),
                 state.getIdpLevelOfAssurance(),
                 false,
                 state.getMatchingServiceAdapterEntityId()
@@ -185,7 +185,7 @@ public class EidasCycle0And1MatchRequestSentStateControllerTest {
 
     @Test
     public void shouldReturnNoMatchStateWhenUserAccountCreationIsDisabled() {
-        when(transactionsConfigProxy.getMatchingProcess(state.getRequestIssuerEntityId())).thenReturn(new MatchingProcess(Optional.absent()));
+        when(transactionsConfigProxy.getMatchingProcess(state.getRequestIssuerEntityId())).thenReturn(new MatchingProcess(Optional.empty()));
         when(transactionsConfigProxy.getUserAccountCreationAttributes(state.getRequestIssuerEntityId())).thenReturn(Lists.emptyList());
         doNothing().when(hubEventLogger).logCycle01NoMatchEvent(
             state.getSessionId(),

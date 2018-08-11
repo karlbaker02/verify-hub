@@ -1,6 +1,6 @@
 package uk.gov.ida.integrationtest.hub.policy;
 
-import com.google.common.base.Optional;
+import java.util.Optional;
 import com.google.inject.AbstractModule;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
@@ -27,7 +27,7 @@ import uk.gov.ida.shared.dropwizard.infinispan.util.InfinispanCacheManager;
 import javax.ws.rs.client.Client;
 import java.net.URI;
 
-import static com.google.common.base.Optional.absent;
+import static java.util.Optional.empty;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 import static uk.gov.ida.hub.policy.builder.domain.SessionIdBuilder.aSessionId;
@@ -226,7 +226,7 @@ public class StateControllerFactoryTest {
                 new AbstractState("requestId", "requestIssuerId", DateTime.now(), URI.create("/some-ac-service-uri"), aSessionId().build(), false) {
                     @Override
                     public Optional<String> getRelayState() {
-                        return absent();
+                        return empty();
                     }
                 },
                 mock(StateTransitionAction.class)

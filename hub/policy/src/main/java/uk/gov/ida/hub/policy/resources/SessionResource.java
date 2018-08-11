@@ -1,7 +1,7 @@
 package uk.gov.ida.hub.policy.resources;
 
 import com.codahale.metrics.annotation.Timed;
-import com.google.common.base.Optional;
+import java.util.Optional;
 import uk.gov.ida.hub.policy.Urls;
 import uk.gov.ida.hub.policy.contracts.SamlAuthnResponseContainerDto;
 import uk.gov.ida.hub.policy.domain.LevelOfAssurance;

@@ -1,6 +1,6 @@
 package uk.gov.ida.integrationtest.hub.policy.rest;
 
-import com.google.common.base.Optional;
+import java.util.Optional;
 import nl.jqno.equalsverifier.EqualsVerifier;
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeUtils;

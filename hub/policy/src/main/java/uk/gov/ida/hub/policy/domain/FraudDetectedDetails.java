@@ -16,7 +16,7 @@ public class FraudDetectedDetails {
         return idpFraudEventId;
     }
 
-    public String getFraudIndicator() {
+    public String getFraudIndicatorElse() {
         return fraudIndicator;
     }
 }

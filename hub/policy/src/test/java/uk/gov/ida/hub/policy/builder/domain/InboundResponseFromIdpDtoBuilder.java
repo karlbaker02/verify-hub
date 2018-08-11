@@ -1,10 +1,11 @@
 package uk.gov.ida.hub.policy.builder.domain;
 
 
-import com.google.common.base.Optional;
 import uk.gov.ida.hub.policy.domain.IdpIdaStatus;
 import uk.gov.ida.hub.policy.domain.InboundResponseFromIdpDto;
 import uk.gov.ida.hub.policy.domain.LevelOfAssurance;
+
+import java.util.Optional;
 
 public class InboundResponseFromIdpDtoBuilder {
     public static InboundResponseFromIdpDto successResponse(String idpEntityId, LevelOfAssurance levelOfAssurance) {
@@ -17,7 +18,7 @@ public class InboundResponseFromIdpDtoBuilder {
     public static InboundResponseFromIdpDto errorResponse(String idpEntityId, IdpIdaStatus.Status status) {
         return buildDTO(status, idpEntityId,
                 Optional.of(LevelOfAssurance.LEVEL_2),
-                Optional.<String>absent());
+                Optional.<String>empty());
     }
 
     public static InboundResponseFromIdpDto fraudResponse(String idpEntityId) {
@@ -33,17 +34,17 @@ public class InboundResponseFromIdpDtoBuilder {
     }
 
     public static InboundResponseFromIdpDto failedResponse(String idpEntityId) {
-        return buildDTO(IdpIdaStatus.Status.AuthenticationFailed, idpEntityId, Optional.of(LevelOfAssurance.LEVEL_2), Optional.<String>absent());
+        return buildDTO(IdpIdaStatus.Status.AuthenticationFailed, idpEntityId, Optional.of(LevelOfAssurance.LEVEL_2), Optional.<String>empty());
     }
 
     public static InboundResponseFromIdpDto noAuthnContextResponse(String idpEntityId) {
-        return buildDTO(IdpIdaStatus.Status.NoAuthenticationContext, idpEntityId, Optional.<LevelOfAssurance>absent(),
-                Optional.<String>absent());
+        return buildDTO(IdpIdaStatus.Status.NoAuthenticationContext, idpEntityId, Optional.<LevelOfAssurance>empty(),
+                Optional.<String>empty());
     }
 
     public static InboundResponseFromIdpDto authnPendingResponse(String idpEntityId) {
-        return buildDTO(IdpIdaStatus.Status.AuthenticationPending, idpEntityId, Optional.<LevelOfAssurance>absent(),
-                Optional.<String>absent());
+        return buildDTO(IdpIdaStatus.Status.AuthenticationPending, idpEntityId, Optional.<LevelOfAssurance>empty(),
+                Optional.<String>empty());
     }
 
     private static InboundResponseFromIdpDto buildDTO(IdpIdaStatus.Status status, String idpEntityId,
@@ -51,12 +52,12 @@ public class InboundResponseFromIdpDtoBuilder {
                                                       Optional<String> fraudText) {
         return new InboundResponseFromIdpDto(
                 status,
-                Optional.fromNullable("message"),
+                Optional.ofNullable("message"),
                 idpEntityId,
-                Optional.fromNullable("authnStatement"),
+                Optional.ofNullable("authnStatement"),
                 Optional.of("encrypted-mds-assertion"),
-                Optional.fromNullable("pid"),
-                Optional.fromNullable("principalipseenbyidp"),
+                Optional.ofNullable("pid"),
+                Optional.ofNullable("principalipseenbyidp"),
                 levelOfAssurance,
                 fraudText,
                 fraudText);

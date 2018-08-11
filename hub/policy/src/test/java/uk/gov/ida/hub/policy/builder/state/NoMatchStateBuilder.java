@@ -1,16 +1,16 @@
 package uk.gov.ida.hub.policy.builder.state;
 
-import com.google.common.base.Optional;
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
 import uk.gov.ida.hub.policy.domain.SessionId;
 import uk.gov.ida.hub.policy.domain.state.NoMatchState;
 
 import java.net.URI;
+import java.util.Optional;
 
 public class NoMatchStateBuilder {
     private String identityProviderEntityId = "idp entity id";
-    private Optional<String> relayState = Optional.absent();
+    private Optional<String> relayState = Optional.empty();
 
     public static NoMatchStateBuilder aNoMatchState() {
         return new NoMatchStateBuilder();

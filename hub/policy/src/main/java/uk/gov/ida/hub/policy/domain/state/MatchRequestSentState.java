@@ -1,6 +1,6 @@
 package uk.gov.ida.hub.policy.domain.state;
 
-import com.google.common.base.Optional;
+import java.util.Optional;
 import org.joda.time.DateTime;
 import uk.gov.ida.hub.policy.domain.LevelOfAssurance;
 import uk.gov.ida.hub.policy.domain.SessionId;
@@ -34,7 +34,7 @@ public abstract class MatchRequestSentState extends AbstractMatchRequestSentStat
                 sessionId,
                 transactionSupportsEidas,
                 identityProviderEntityId,
-                Optional.fromNullable(relayState),
+                Optional.ofNullable(relayState),
                 idpLevelOfAssurance,
                 matchingServiceAdapterEntityId
         );

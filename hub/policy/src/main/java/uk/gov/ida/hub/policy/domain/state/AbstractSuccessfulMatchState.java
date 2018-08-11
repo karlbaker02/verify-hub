@@ -1,6 +1,6 @@
 package uk.gov.ida.hub.policy.domain.state;
 
-import com.google.common.base.Optional;
+import java.util.Optional;
 import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
 import org.apache.commons.lang3.builder.StandardToStringStyle;
 import org.joda.time.DateTime;

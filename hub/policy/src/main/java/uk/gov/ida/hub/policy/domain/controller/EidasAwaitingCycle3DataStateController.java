@@ -1,6 +1,6 @@
 package uk.gov.ida.hub.policy.domain.controller;
 
-import com.google.common.base.Optional;
+import java.util.Optional;
 import org.joda.time.DateTime;
 import uk.gov.ida.hub.policy.PolicyConfiguration;
 import uk.gov.ida.hub.policy.contracts.EidasAttributeQueryRequestDto;
@@ -56,8 +56,8 @@ public class EidasAwaitingCycle3DataStateController extends AbstractAwaitingCycl
             matchingServiceConfigData.isOnboarding(),
             getState().getLevelOfAssurance(),
             getState().getPersistentId(),
-            Optional.fromNullable(cycle3Dataset),
-            Optional.absent(),
+            Optional.ofNullable(cycle3Dataset),
+            Optional.empty(),
             getState().getEncryptedIdentityAssertion()
         );
     }
@@ -80,7 +80,7 @@ public class EidasAwaitingCycle3DataStateController extends AbstractAwaitingCycl
             getState().getSessionId(),
             getState().getTransactionSupportsEidas(),
             getState().getIdentityProviderEntityId(),
-            getState().getRelayState().orNull(),
+            getState().getRelayState().orElse(null),
             getState().getLevelOfAssurance(),
             getState().getMatchingServiceEntityId(),
             getState().getEncryptedIdentityAssertion(),

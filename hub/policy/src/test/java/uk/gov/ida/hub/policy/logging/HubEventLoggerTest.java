@@ -1,6 +1,5 @@
 package uk.gov.ida.hub.policy.logging;
 
-import com.google.common.base.Optional;
 import com.google.common.collect.Maps;
 import org.joda.time.DateTime;
 import org.junit.After;
@@ -30,6 +29,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.UUID;
 
 import static org.mockito.Matchers.argThat;
@@ -157,7 +157,7 @@ public class HubEventLoggerTest {
             MINIMUM_LEVEL_OF_ASSURANCE,
             REQUIRED_LEVEL_OF_ASSURANCE,
             PROVIDED_LEVEL_OF_ASSURANCE,
-            Optional.fromNullable(PRINCIPAL_IP_ADDRESS_SEEN_BY_IDP),
+            Optional.ofNullable(PRINCIPAL_IP_ADDRESS_SEEN_BY_IDP),
             PRINCIPAL_IP_ADDRESS_SEEN_BY_HUB);
 
         final Map<EventDetailsKey, String> details = Maps.newHashMap();
@@ -260,7 +260,7 @@ public class HubEventLoggerTest {
             TRANSACTION_ENTITY_ID,
             SESSION_EXPIRY_TIMESTAMP,
             REQUEST_ID,
-            Optional.fromNullable(errorMessage),
+            Optional.ofNullable(errorMessage),
             PRINCIPAL_IP_ADDRESS_SEEN_BY_HUB);
 
         final Map<EventDetailsKey, String> details = Maps.newHashMap();

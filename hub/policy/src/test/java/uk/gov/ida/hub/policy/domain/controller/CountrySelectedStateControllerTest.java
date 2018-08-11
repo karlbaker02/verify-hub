@@ -132,7 +132,7 @@ public class CountrySelectedStateControllerTest {
             new SessionId(state.getSessionId().getSessionId()),
             state.getTransactionSupportsEidas(),
             COUNTRY_ENTITY_ID,
-            state.getRelayState().orNull(),
+            state.getRelayState().orElse(null),
             eidasAttributeQueryRequestDto.getLevelOfAssurance(),
             MSA_ID,
             eidasAttributeQueryRequestDto.getEncryptedIdentityAssertion(),
@@ -151,7 +151,7 @@ public class CountrySelectedStateControllerTest {
             state.getLevelsOfAssurance().get(0),
             state.getLevelsOfAssurance().get(state.getLevelsOfAssurance().size() - 1),
             eidasAttributeQueryRequestDto.getLevelOfAssurance(),
-            com.google.common.base.Optional.absent(),
+            java.util.Optional.empty(),
             ipAddress);
         verify(stateTransitionAction).transitionTo(eidasCycle0And1MatchRequestSentState);
     }

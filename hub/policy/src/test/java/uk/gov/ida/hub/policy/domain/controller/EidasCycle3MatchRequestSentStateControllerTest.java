@@ -1,6 +1,5 @@
 package uk.gov.ida.hub.policy.domain.controller;
 
-import com.google.common.base.Optional;
 import com.google.common.collect.ImmutableList;
 import org.joda.time.Duration;
 import org.junit.Before;
@@ -43,6 +42,7 @@ import uk.gov.ida.hub.policy.services.AttributeQueryService;
 import uk.gov.ida.hub.policy.validators.LevelOfAssuranceValidator;
 
 import java.net.URI;
+import java.util.Optional;
 
 import static java.text.MessageFormat.format;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -145,7 +145,7 @@ public class EidasCycle3MatchRequestSentStateControllerTest {
 
         EidasAttributeQueryRequestDto actualAttributeQueryRequestDto = attributeQueryRequestCaptor.getValue();
         assertThat(actualAttributeQueryRequestDto.getAttributeQueryUri()).isEqualTo(userAccountCreationUri);
-        assertThat(actualAttributeQueryRequestDto.getUserAccountCreationAttributes()).isEqualTo(Optional.fromNullable(userAccountCreationAttributes));
+        assertThat(actualAttributeQueryRequestDto.getUserAccountCreationAttributes()).isEqualTo(Optional.ofNullable(userAccountCreationAttributes));
         assertThat(actualAttributeQueryRequestDto.getEncryptedIdentityAssertion()).isEqualTo(state.getEncryptedIdentityAssertion());
 
         assertThat(nextState).isInstanceOf(UserAccountCreationRequestSentState.class);

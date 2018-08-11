@@ -1,6 +1,6 @@
 package uk.gov.ida.hub.policy.logging;
 
-import com.google.common.base.Optional;
+import java.util.Optional;
 import com.google.common.collect.ImmutableMap;
 import org.joda.time.DateTime;
 import org.slf4j.Logger;
@@ -143,7 +143,7 @@ public class HubEventLogger {
         details.put(idp_entity_id, transactionEntityId);
         details.put(pid, persistentId.getNameId());
         details.put(idp_fraud_event_id, fraudDetectedDetails.getIdpFraudEventId());
-        details.put(gpg45_status, fraudDetectedDetails.getFraudIndicator());
+        details.put(gpg45_status, fraudDetectedDetails.getFraudIndicatorElse());
         if (principalIpAddressSeenByIdp.isPresent()) {
             details.put(principal_ip_address_as_seen_by_idp, principalIpAddressSeenByIdp.get());
         }
