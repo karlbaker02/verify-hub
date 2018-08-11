@@ -1,5 +1,7 @@
 package uk.gov.ida.hub.policy.domain.state;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.common.base.Optional;
 import org.joda.time.DateTime;
 import uk.gov.ida.hub.policy.domain.AbstractState;
@@ -25,22 +27,23 @@ public class IdpSelectedState extends AbstractState implements IdpSelectingState
     private final LevelOfAssurance requestedLoa;
     private final List<String> availableIdentityProviders;
 
+    @JsonCreator
     public IdpSelectedState(
-            String requestId,
-            String idpEntityId,
-            String matchingServiceEntityId,
-            List<LevelOfAssurance> levelsOfAssurance,
-            Boolean useExactComparisonType,
-            Boolean forceAuthentication,
-            URI assertionConsumerServiceUri,
-            String requestIssuerId,
-            String relayState,
-            DateTime sessionExpiryTimestamp,
-            boolean registering,
-            LevelOfAssurance requestedLoa,
-            SessionId sessionId,
-            List<String> availableIdentityProviders,
-            boolean transactionSupportsEidas) {
+            @JsonProperty("requestId") String requestId,
+            @JsonProperty("idpEntityId") String idpEntityId,
+            @JsonProperty("matchingServiceEntityId") String matchingServiceEntityId,
+            @JsonProperty("levelsOfAssurance") List<LevelOfAssurance> levelsOfAssurance,
+            @JsonProperty("useExactComparisonType") Boolean useExactComparisonType,
+            @JsonProperty("forceAuthentication") Boolean forceAuthentication,
+            @JsonProperty("assertionConsumerServiceUri") URI assertionConsumerServiceUri,
+            @JsonProperty("requestIssuerId") String requestIssuerId,
+            @JsonProperty("relayState") String relayState,
+            @JsonProperty("sessionExpiryTimestamp") DateTime sessionExpiryTimestamp,
+            @JsonProperty("registering") boolean registering,
+            @JsonProperty("requestedLoa") LevelOfAssurance requestedLoa,
+            @JsonProperty("sessionId") SessionId sessionId,
+            @JsonProperty("availableIdentityProviders") List<String> availableIdentityProviders,
+            @JsonProperty("transactionSupportsEidas") boolean transactionSupportsEidas) {
 
         super(requestId, requestIssuerId, sessionExpiryTimestamp, assertionConsumerServiceUri, sessionId, transactionSupportsEidas);
 

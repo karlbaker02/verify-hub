@@ -1,5 +1,7 @@
 package uk.gov.ida.hub.policy.domain.state;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.common.base.Optional;
 import org.joda.time.DateTime;
 import uk.gov.ida.hub.policy.domain.LevelOfAssurance;
@@ -17,21 +19,22 @@ public class AwaitingCycle3DataState extends AbstractAwaitingCycle3DataState imp
     private final String authnStatementAssertion;
     private final boolean registering;
 
+    @JsonCreator
     public AwaitingCycle3DataState(
-            String requestId,
-            String identityProviderEntityId,
-            DateTime sessionExpiryTimestamp,
-            String requestIssuerId,
-            String encryptedMatchingDatasetAssertion,
-            String authnStatementAssertion,
-            String relayState,
-            URI assertionConsumerServiceUri,
-            String matchingServiceEntityId,
-            SessionId sessionId,
-            PersistentId persistentId,
-            LevelOfAssurance levelOfAssurance,
-            boolean registering,
-            boolean transactionSupportsEidas) {
+            @JsonProperty("requestId") String requestId,
+            @JsonProperty("identityProviderEntityId") String identityProviderEntityId,
+            @JsonProperty("sessionExpiryTimestamp") DateTime sessionExpiryTimestamp,
+            @JsonProperty("requestIssuerId") String requestIssuerId,
+            @JsonProperty("encryptedMatchingDatasetAssertion") String encryptedMatchingDatasetAssertion,
+            @JsonProperty("authnStatementAssertion") String authnStatementAssertion,
+            @JsonProperty("relayState") String relayState,
+            @JsonProperty("assertionConsumerServiceUri") URI assertionConsumerServiceUri,
+            @JsonProperty("matchingServiceEntityId") String matchingServiceEntityId,
+            @JsonProperty("sessionId") SessionId sessionId,
+            @JsonProperty("persistentId") PersistentId persistentId,
+            @JsonProperty("levelOfAssurance") LevelOfAssurance levelOfAssurance,
+            @JsonProperty("registering") boolean registering,
+            @JsonProperty("transactionSupportsEidas") boolean transactionSupportsEidas) {
 
         super(
                 requestId,

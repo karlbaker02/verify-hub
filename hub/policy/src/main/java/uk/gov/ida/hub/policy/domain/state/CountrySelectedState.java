@@ -1,5 +1,7 @@
 package uk.gov.ida.hub.policy.domain.state;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.common.base.Optional;
 import org.joda.time.DateTime;
 import uk.gov.ida.hub.policy.domain.AbstractState;
@@ -20,21 +22,23 @@ public class CountrySelectedState extends AbstractState implements CountrySelect
     private final Optional<String> relayState;
     private List<LevelOfAssurance> levelsOfAssurance = Collections.EMPTY_LIST;
 
-    public CountrySelectedState(String countryEntityId,
-                                Optional<String> relayState,
-                                String requestId,
-                                String requestIssuerId,
-                                DateTime sessionExpiryTimestamp,
-                                URI assertionConsumerServiceUri,
-                                SessionId sessionId,
-                                boolean transactionSupportsEidas,
-                                List<LevelOfAssurance> levelsOfAssurance) {
+    @JsonCreator
+    public CountrySelectedState(
+            @JsonProperty("countryEntityId") String countryEntityId,
+            @JsonProperty("relayState") Optional<String> relayState,
+            @JsonProperty("requestId") String requestId,
+            @JsonProperty("requestIssuerId") String requestIssuerId,
+            @JsonProperty("sessionExpiryTimestamp") DateTime sessionExpiryTimestamp,
+            @JsonProperty("assertionConsumerServiceUri") URI assertionConsumerServiceUri,
+            @JsonProperty("sessionId") SessionId sessionId,
+            @JsonProperty("transactionSupportsEidas") boolean transactionSupportsEidas,
+            @JsonProperty("levelsOfAssurance") List<LevelOfAssurance> levelsOfAssurance) {
         super(requestId,
-            requestIssuerId,
-            sessionExpiryTimestamp,
-            assertionConsumerServiceUri,
-            sessionId,
-            transactionSupportsEidas);
+                requestIssuerId,
+                sessionExpiryTimestamp,
+                assertionConsumerServiceUri,
+                sessionId,
+                transactionSupportsEidas);
         this.relayState = relayState;
         this.countryEntityId = countryEntityId;
         this.levelsOfAssurance = levelsOfAssurance;
@@ -45,7 +49,9 @@ public class CountrySelectedState extends AbstractState implements CountrySelect
         return relayState;
     }
 
-    public String getCountryEntityId() { return countryEntityId; }
+    public String getCountryEntityId() {
+        return countryEntityId;
+    }
 
     public List<LevelOfAssurance> getLevelsOfAssurance() {
         return levelsOfAssurance;

@@ -1,5 +1,7 @@
 package uk.gov.ida.hub.policy.domain.state;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.common.base.Optional;
 import org.joda.time.DateTime;
 import uk.gov.ida.hub.policy.domain.AbstractState;
@@ -19,18 +21,19 @@ public class UserAccountCreatedState extends AbstractState implements ResponsePr
     private final LevelOfAssurance levelOfAssurance;
     private final boolean registering;
 
+    @JsonCreator
     public UserAccountCreatedState(
-            final String requestId,
-            final String requestIssuerId,
-            final DateTime sessionExpiryTimestamp,
-            final URI assertionConsumerServiceUri,
-            final SessionId sessionId,
-            final String identityProviderEntityId,
-            final String matchingServiceAssertion,
-            final String relayState,
-            LevelOfAssurance levelOfAssurance,
-            boolean registering,
-            boolean transactionSupportsEidas) {
+            @JsonProperty("requestId") final String requestId,
+            @JsonProperty("requestIssuerId") final String requestIssuerId,
+            @JsonProperty("sessionExpiryTimestamp") final DateTime sessionExpiryTimestamp,
+            @JsonProperty("assertionConsumerServiceUri") final URI assertionConsumerServiceUri,
+            @JsonProperty("sessionId") final SessionId sessionId,
+            @JsonProperty("identityProviderEntityId") final String identityProviderEntityId,
+            @JsonProperty("matchingServiceAssertion") final String matchingServiceAssertion,
+            @JsonProperty("relayState") final String relayState,
+            @JsonProperty("levelOfAssurance") LevelOfAssurance levelOfAssurance,
+            @JsonProperty("registering") boolean registering,
+            @JsonProperty("transactionSupportsEidas") boolean transactionSupportsEidas) {
         super(requestId, requestIssuerId, sessionExpiryTimestamp, assertionConsumerServiceUri, sessionId, transactionSupportsEidas);
         this.identityProviderEntityId = identityProviderEntityId;
         this.matchingServiceAssertion = matchingServiceAssertion;

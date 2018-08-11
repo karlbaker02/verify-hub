@@ -1,5 +1,7 @@
 package uk.gov.ida.hub.policy.domain.state;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.common.base.Optional;
 import org.joda.time.DateTime;
 import uk.gov.ida.hub.policy.domain.AbstractState;
@@ -14,15 +16,16 @@ public class RequesterErrorState extends AbstractState implements IdpSelectingSt
     private String relayState;
     private Boolean forceAuthentication;
 
+    @JsonCreator
     public RequesterErrorState(
-            String requestId,
-            String authnRequestIssuerEntityId,
-            DateTime sessionExpiryTimestamp,
-            URI assertionConsumerServiceUri,
-            String relayState,
-            SessionId sessionId,
-            Boolean forceAuthentication,
-            boolean transactionSupportsEidas) {
+            @JsonProperty("requestId") String requestId,
+            @JsonProperty("authnRequestIssuerEntityId") String authnRequestIssuerEntityId,
+            @JsonProperty("sessionExpiryTimestamp") DateTime sessionExpiryTimestamp,
+            @JsonProperty("assertionConsumerServiceUri") URI assertionConsumerServiceUri,
+            @JsonProperty("relayState") String relayState,
+            @JsonProperty("sessionId") SessionId sessionId,
+            @JsonProperty("forceAuthentication") Boolean forceAuthentication,
+            @JsonProperty("transactionSupportsEidas") boolean transactionSupportsEidas) {
 
         super(requestId, authnRequestIssuerEntityId, sessionExpiryTimestamp, assertionConsumerServiceUri, sessionId, transactionSupportsEidas);
 

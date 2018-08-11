@@ -1,5 +1,7 @@
 package uk.gov.ida.hub.policy.domain.state;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.common.base.Optional;
 import org.joda.time.DateTime;
 import uk.gov.ida.hub.policy.domain.LevelOfAssurance;
@@ -14,18 +16,19 @@ public final class SuccessfulMatchState extends AbstractSuccessfulMatchState {
 
     private final boolean isRegistering;
 
+    @JsonCreator
     public SuccessfulMatchState(
-            String requestId,
-            DateTime sessionExpiryTimestamp,
-            String identityProviderEntityId,
-            String matchingServiceAssertion,
-            String relayState,
-            String requestIssuerId,
-            URI assertionConsumerServiceUri,
-            SessionId sessionId,
-            LevelOfAssurance levelOfAssurance,
-            boolean isRegistering,
-            boolean transactionSupportsEidas) {
+            @JsonProperty("requestId") String requestId,
+            @JsonProperty("sessionExpiryTimestamp") DateTime sessionExpiryTimestamp,
+            @JsonProperty("identityProviderEntityId") String identityProviderEntityId,
+            @JsonProperty("matchingServiceAssertion") String matchingServiceAssertion,
+            @JsonProperty("relayState") String relayState,
+            @JsonProperty("requestIssuerId") String requestIssuerId,
+            @JsonProperty("assertionConsumerServiceUri") URI assertionConsumerServiceUri,
+            @JsonProperty("sessionId") SessionId sessionId,
+            @JsonProperty("levelOfAssurance") LevelOfAssurance levelOfAssurance,
+            @JsonProperty("isRegistering") boolean isRegistering,
+            @JsonProperty("transactionSupportsEidas") boolean transactionSupportsEidas) {
 
         super(
                 requestId,
