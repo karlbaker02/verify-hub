@@ -1,5 +1,7 @@
 package uk.gov.ida.hub.policy.domain.state;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.common.base.Optional;
 import org.joda.time.DateTime;
 import uk.gov.ida.hub.policy.domain.AbstractState;
@@ -15,15 +17,16 @@ public class SessionStartedState extends AbstractState implements IdpSelectingSt
     private final String relayState;
     private final Boolean forceAuthentication;
 
+    @JsonCreator
     public SessionStartedState(
-            String requestId,
-            String relayState,
-            String requestIssuerId,
-            URI assertionConsumerServiceUri,
-            Boolean forceAuthentication,
-            DateTime sessionExpiryTimestamp,
-            SessionId sessionId,
-            boolean transactionSupportsEidas) {
+            @JsonProperty("requestId") String requestId,
+            @JsonProperty("relayState") String relayState,
+            @JsonProperty("requestIssuerId") String requestIssuerId,
+            @JsonProperty("assertionConsumerServiceUri") URI assertionConsumerServiceUri,
+            @JsonProperty("forceAuthentication") Boolean forceAuthentication,
+            @JsonProperty("sessionExpiryTimestamp") DateTime sessionExpiryTimestamp,
+            @JsonProperty("sessionId") SessionId sessionId,
+            @JsonProperty("transactionSupportsEidas") boolean transactionSupportsEidas) {
 
         super(requestId, requestIssuerId, sessionExpiryTimestamp, assertionConsumerServiceUri, sessionId, transactionSupportsEidas);
 

@@ -1,5 +1,7 @@
 package uk.gov.ida.hub.policy.domain.state;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.common.base.Optional;
 import org.joda.time.DateTime;
 import uk.gov.ida.hub.policy.domain.AbstractState;
@@ -14,13 +16,15 @@ public class PausedRegistrationState extends AbstractState implements State {
 
     private Optional<String> relayState;
 
-    public PausedRegistrationState(String requestId,
-                                   String requestIssuerId,
-                                   DateTime sessionExpiryTimestamp,
-                                   URI assertionConsumerServiceUri,
-                                   SessionId sessionId,
-                                   boolean transactionSupportsEidas,
-                                   Optional<String> relayState) {
+    @JsonCreator
+    public PausedRegistrationState(
+            @JsonProperty("requestId") String requestId,
+            @JsonProperty("requestIssuerId") String requestIssuerId,
+            @JsonProperty("sessionExpiryTimestamp") DateTime sessionExpiryTimestamp,
+            @JsonProperty("assertionConsumerServiceUri") URI assertionConsumerServiceUri,
+            @JsonProperty("sessionId") SessionId sessionId,
+            @JsonProperty("transactionSupportsEidas") boolean transactionSupportsEidas,
+            @JsonProperty("relayState") Optional<String> relayState) {
         super(requestId, requestIssuerId, sessionExpiryTimestamp, assertionConsumerServiceUri, sessionId, transactionSupportsEidas);
         this.relayState = relayState;
     }
