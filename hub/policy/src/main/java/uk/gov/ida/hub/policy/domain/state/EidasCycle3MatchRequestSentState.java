@@ -9,7 +9,7 @@ import uk.gov.ida.hub.policy.domain.SessionId;
 
 import java.net.URI;
 
-public final class EidasCycle3MatchRequestSentState extends EidasMatchRequestSentState {
+public class EidasCycle3MatchRequestSentState extends EidasMatchRequestSentState {
 
     private static final long serialVersionUID = 8951117516881029017L;
 

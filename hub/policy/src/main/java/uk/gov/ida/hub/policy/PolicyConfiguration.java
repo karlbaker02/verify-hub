@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import io.dropwizard.Configuration;
 import io.dropwizard.client.JerseyClientConfiguration;
 import io.dropwizard.util.Duration;
+import org.redisson.config.Config;
 import uk.gov.ida.common.ServiceInfoConfiguration;
 import uk.gov.ida.configuration.ServiceNameConfiguration;
 import uk.gov.ida.restclient.RestfulClientConfiguration;
@@ -38,6 +39,10 @@ public class PolicyConfiguration extends Configuration implements RestfulClientC
     @NotNull
     @JsonProperty
     protected InfinispanConfiguration infinispan;
+
+    @Valid
+    @JsonProperty
+    protected Config redis;
 
     @Valid
     @NotNull
@@ -106,6 +111,10 @@ public class PolicyConfiguration extends Configuration implements RestfulClientC
     @Override
     public InfinispanConfiguration getInfinispan() {
         return infinispan;
+    }
+
+    public Config getRedis() {
+        return redis;
     }
 
     @Override

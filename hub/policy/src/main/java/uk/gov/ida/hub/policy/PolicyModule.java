@@ -1,11 +1,16 @@
 package uk.gov.ida.hub.policy;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;
+import com.fasterxml.jackson.datatype.joda.JodaModule;
 import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
 import com.google.inject.Scopes;
 import io.dropwizard.setup.Environment;
 import org.joda.time.DateTime;
+import org.redisson.Redisson;
+import org.redisson.client.codec.JsonJacksonMapCodec;
+import org.redisson.codec.JsonJacksonCodec;
 import uk.gov.ida.common.ServiceInfoConfiguration;
 import uk.gov.ida.common.shared.security.IdGenerator;
 import uk.gov.ida.eventemitter.Configuration;
@@ -124,13 +129,30 @@ public class PolicyModule extends AbstractModule {
 
     @Provides
     @Singleton
-    public ConcurrentMap<SessionId, State> sessionCache(InfinispanCacheManager infinispanCacheManager) {
+    public ConcurrentMap<SessionId, State> sessionCache(
+            PolicyConfiguration configuration,
+            InfinispanCacheManager infinispanCacheManager) {
+        if (configuration.getRedis() != null) {
+            org.redisson.config.Config config = configuration.getRedis();
+            config.setCodec(new JsonJacksonCodec(new ObjectMapper()
+                    .registerModule(new Jdk8Module().configureAbsentsAsNulls(true))
+                    .registerModule(new JodaModule())
+            ));
+            Redisson.create(config).getMap("state_cache");
+        }
         return infinispanCacheManager.getCache("state_cache");
     }
 
     @Provides
     @Singleton
-    public ConcurrentMap<SessionId, DateTime> datetime_cache(InfinispanCacheManager infinispanCacheManager) {
+    public ConcurrentMap<SessionId, DateTime> datetime_cache(
+            PolicyConfiguration configuration,
+            InfinispanCacheManager infinispanCacheManager) {
+        if (configuration.getRedis() != null) {
+            org.redisson.config.Config config = configuration.getRedis();
+            config.setCodec(new DateTimeJacksonCodec());
+            Redisson.create(config).getMap("state_cache");
+        }
         return infinispanCacheManager.getCache("datetime_cache");
     }
 
