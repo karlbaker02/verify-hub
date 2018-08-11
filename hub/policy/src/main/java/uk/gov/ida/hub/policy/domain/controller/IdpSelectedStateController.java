@@ -187,9 +187,9 @@ public class IdpSelectedStateController implements StateController, ErrorRespons
                 state.getRequestIssuerEntityId(),
                 state.getSessionExpiryTimestamp(),
                 state.getAssertionConsumerServiceUri(),
-                state.getRelayState().orNull(),
+                state.getRelayState().orElse(null),
                 state.getSessionId(),
-                state.getForceAuthentication().orNull(),
+                state.getForceAuthentication().orElse(null),
                 state.getTransactionSupportsEidas());
     }
 
@@ -199,20 +199,20 @@ public class IdpSelectedStateController implements StateController, ErrorRespons
                 state.getRequestIssuerEntityId(),
                 state.getSessionExpiryTimestamp(),
                 state.getAssertionConsumerServiceUri(),
-                state.getRelayState().orNull(),
+                state.getRelayState().orElse(null),
                 state.getSessionId(),
                 state.getIdpEntityId(),
-                state.getForceAuthentication().orNull(),
+                state.getForceAuthentication().orElse(null),
                 state.getTransactionSupportsEidas());
     }
 
     private SessionStartedState createSessionStartedState() {
         return new SessionStartedState(
                 state.getRequestId(),
-                state.getRelayState().orNull(),
+                state.getRelayState().orElse(null),
                 state.getRequestIssuerEntityId(),
                 state.getAssertionConsumerServiceUri(),
-                state.getForceAuthentication().orNull(),
+                state.getForceAuthentication().orElse(null),
                 state.getSessionExpiryTimestamp(),
                 state.getSessionId(),
                 state.getTransactionSupportsEidas());
@@ -224,10 +224,10 @@ public class IdpSelectedStateController implements StateController, ErrorRespons
                 state.getRequestIssuerEntityId(),
                 state.getSessionExpiryTimestamp(),
                 state.getAssertionConsumerServiceUri(),
-                state.getRelayState().orNull(),
+                state.getRelayState().orElse(null),
                 state.getSessionId(),
                 state.getIdpEntityId(),
-                state.getForceAuthentication().orNull(),
+                state.getForceAuthentication().orElse(null),
                 state.getTransactionSupportsEidas());
     }
 
@@ -256,7 +256,7 @@ public class IdpSelectedStateController implements StateController, ErrorRespons
             state.getTransactionSupportsEidas(),
             state.isRegistering(),
             successFromIdp.getIssuer(),
-            state.getRelayState().orNull(),
+            state.getRelayState().orElse(null),
             successFromIdp.getLevelOfAssurance(),
             matchingServiceEntityId,
             successFromIdp.getEncryptedMatchingDatasetAssertion(),

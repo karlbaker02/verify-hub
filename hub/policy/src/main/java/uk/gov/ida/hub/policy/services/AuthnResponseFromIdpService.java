@@ -83,7 +83,7 @@ public class AuthnResponseFromIdpService {
                 responseAction = handleAuthnFailedResponse(inboundResponseFromIdpDto, sessionId, principalIPAddressAsSeenByHub, idpSelectedController);
                 break;
             case RequesterError:
-                responseAction = handleRequesterError(inboundResponseFromIdpDto, sessionId, principalIPAddressAsSeenByHub, idpSelectedController);
+                responseAction = handleRequesterErrorElse(inboundResponseFromIdpDto, sessionId, principalIPAddressAsSeenByHub, idpSelectedController);
                 break;
             case UpliftFailed:
                 responseAction = handleUpliftFailed(inboundResponseFromIdpDto, sessionId, principalIPAddressAsSeenByHub, idpSelectedController);
@@ -119,7 +119,7 @@ public class AuthnResponseFromIdpService {
         return success(sessionId, idpSelectedStateController.isRegistrationContext(), loaAchieved);
     }
 
-    private ResponseAction handleRequesterError(InboundResponseFromIdpDto idaResponseFromIdp, SessionId sessionId, String principalIPAddressAsSeenByHub, IdpSelectedStateController idpSelectedStateController) {
+    private ResponseAction handleRequesterErrorElse(InboundResponseFromIdpDto idaResponseFromIdp, SessionId sessionId, String principalIPAddressAsSeenByHub, IdpSelectedStateController idpSelectedStateController) {
         RequesterErrorResponse requesterErrorResponse =
                 new RequesterErrorResponse(idaResponseFromIdp.getIssuer(), idaResponseFromIdp.getStatusMessage(), principalIPAddressAsSeenByHub);
         idpSelectedStateController.handleRequesterErrorResponseFromIdp(requesterErrorResponse);
@@ -166,7 +166,7 @@ public class AuthnResponseFromIdpService {
     }
 
     private ResponseAction handlePendingResponse(InboundResponseFromIdpDto inboundResponseFromIdpDto, SessionId sessionId, String principalIpAddressAsSeenByHub, IdpSelectedStateController idpSelectedStateController) {
-        idpSelectedStateController.handlePausedRegistrationResponseFromIdp(inboundResponseFromIdpDto.getIssuer(), principalIpAddressAsSeenByHub, inboundResponseFromIdpDto.getLevelOfAssurance().toJavaUtil());
+        idpSelectedStateController.handlePausedRegistrationResponseFromIdp(inboundResponseFromIdpDto.getIssuer(), principalIpAddressAsSeenByHub, inboundResponseFromIdpDto.getLevelOfAssurance());
         return pending(sessionId);
     }
 }

@@ -1,7 +1,7 @@
 package uk.gov.ida.hub.policy.proxy;
 
 import com.codahale.metrics.annotation.Timed;
-import com.google.common.base.Optional;
+import java.util.Optional;
 import com.google.common.base.Throwables;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;

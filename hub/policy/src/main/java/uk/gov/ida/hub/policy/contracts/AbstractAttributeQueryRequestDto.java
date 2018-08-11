@@ -1,7 +1,7 @@
 package uk.gov.ida.hub.policy.contracts;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.google.common.base.Optional;
+import java.util.Optional;
 import org.joda.time.DateTime;
 import uk.gov.ida.hub.policy.domain.Cycle3Dataset;
 import uk.gov.ida.hub.policy.domain.LevelOfAssurance;

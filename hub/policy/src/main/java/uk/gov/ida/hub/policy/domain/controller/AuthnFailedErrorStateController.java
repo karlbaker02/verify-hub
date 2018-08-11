@@ -70,7 +70,7 @@ public class AuthnFailedErrorStateController implements IdpSelectingStateControl
     private SessionStartedState createSessionStartedState() {
         return new SessionStartedState(
                 state.getRequestId(),
-                state.getRelayState().orNull(),
+                state.getRelayState().orElse(null),
                 state.getRequestIssuerEntityId(),
                 state.getAssertionConsumerServiceUri(),
                 null,

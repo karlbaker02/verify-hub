@@ -1,7 +1,7 @@
 package uk.gov.ida.hub.policy.contracts;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.google.common.base.Optional;
+import java.util.Optional;
 import org.joda.time.DateTime;
 import uk.gov.ida.hub.policy.domain.Cycle3Dataset;
 import uk.gov.ida.hub.policy.domain.LevelOfAssurance;
@@ -82,7 +82,7 @@ public final class AttributeQueryRequestDto extends AbstractAttributeQueryReques
             onboarding,
             levelOfAssurance,
             persistentId,
-            Optional.fromNullable(cycle3Assertion),
+            Optional.ofNullable(cycle3Assertion),
             userAccountCreationAttributes,
             encryptedMatchingDatasetAssertion,
             authnStatementAssertion
@@ -114,8 +114,8 @@ public final class AttributeQueryRequestDto extends AbstractAttributeQueryReques
             onboarding,
             levelOfAssurance,
             persistentId,
-            Optional.absent(),
-            Optional.absent(),
+            Optional.empty(),
+            Optional.empty(),
             encryptedMatchingDatasetAssertion,
             authnStatementAssertion
         );
@@ -149,7 +149,7 @@ public final class AttributeQueryRequestDto extends AbstractAttributeQueryReques
             levelOfAssurance,
             persistentId,
             cycle3Assertion,
-            Optional.fromNullable(userAccountCreationAttributes),
+            Optional.ofNullable(userAccountCreationAttributes),
             encryptedMatchingDatasetAssertion,
             authnStatementAssertion
         );

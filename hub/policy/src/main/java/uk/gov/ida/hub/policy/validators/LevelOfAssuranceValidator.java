@@ -1,6 +1,6 @@
 package uk.gov.ida.hub.policy.validators;
 
-import com.google.common.base.Optional;
+import java.util.Optional;
 import uk.gov.ida.hub.policy.domain.LevelOfAssurance;
 
 import java.util.Arrays;

@@ -1,6 +1,6 @@
 package uk.gov.ida.hub.policy.domain.controller;
 
-import com.google.common.base.Optional;
+import java.util.Optional;
 import org.joda.time.DateTime;
 import uk.gov.ida.hub.policy.PolicyConfiguration;
 import uk.gov.ida.hub.policy.contracts.AbstractAttributeQueryRequestDto;
@@ -83,7 +83,7 @@ public class EidasCycle3MatchRequestSentStateController extends EidasMatchReques
                 state.getSessionExpiryTimestamp(),
                 state.getIdentityProviderEntityId(),
                 matchingServiceAssertion,
-                state.getRelayState().orNull(),
+                state.getRelayState().orElse(null),
                 requestIssuerId,
                 state.getAssertionConsumerServiceUri(),
                 state.getSessionId(),
@@ -117,7 +117,7 @@ public class EidasCycle3MatchRequestSentStateController extends EidasMatchReques
                 matchingServiceConfig.isOnboarding(),
                 state.getIdpLevelOfAssurance(),
                 state.getPersistentId(),
-                Optional.absent(),
+                Optional.empty(),
                 Optional.of(userAccountCreationAttributes),
                 state.getEncryptedIdentityAssertion()
         );

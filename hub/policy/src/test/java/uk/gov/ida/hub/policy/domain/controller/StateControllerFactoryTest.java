@@ -1,6 +1,5 @@
 package uk.gov.ida.hub.policy.domain.controller;
 
-import com.google.common.base.Optional;
 import com.google.inject.Injector;
 import org.joda.time.DateTime;
 import org.junit.Before;
@@ -24,6 +23,7 @@ import uk.gov.ida.hub.policy.proxy.TransactionsConfigProxy;
 import uk.gov.ida.hub.policy.services.AttributeQueryService;
 
 import java.net.URI;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
@@ -261,7 +261,7 @@ public class StateControllerFactoryTest {
 
         @Override
         public Optional<String> getRelayState() {
-            return Optional.absent();
+            return Optional.empty();
         }
     }
 }

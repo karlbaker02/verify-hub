@@ -55,7 +55,7 @@ public class UserAccountCreationRequestSentStateController extends MatchRequestS
                 state.getSessionExpiryTimestamp(),
                 state.getIdentityProviderEntityId(),
                 matchingServiceAssertion,
-                state.getRelayState().orNull(),
+                state.getRelayState().orElse(null),
                 requestIssuerId,
                 state.getAssertionConsumerServiceUri(),
                 state.getSessionId(),
@@ -78,7 +78,7 @@ public class UserAccountCreationRequestSentStateController extends MatchRequestS
                 state.getSessionId(),
                 state.getIdentityProviderEntityId(),
                 responseFromMatchingService.getMatchingServiceAssertion(),
-                state.getRelayState().orNull(),
+                state.getRelayState().orElse(null),
                 state.getIdpLevelOfAssurance(),
                 state.isRegistering(),
                 state.getTransactionSupportsEidas());

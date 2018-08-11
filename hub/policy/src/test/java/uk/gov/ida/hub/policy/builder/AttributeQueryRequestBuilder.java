@@ -1,6 +1,5 @@
 package uk.gov.ida.hub.policy.builder;
 
-import com.google.common.base.Optional;
 import org.joda.time.DateTime;
 import uk.gov.ida.hub.policy.builder.domain.PersistentIdBuilder;
 import uk.gov.ida.hub.policy.contracts.AttributeQueryRequestDto;
@@ -11,6 +10,7 @@ import uk.gov.ida.hub.policy.domain.UserAccountCreationAttribute;
 
 import java.net.URI;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 public class AttributeQueryRequestBuilder {
@@ -44,8 +44,8 @@ public class AttributeQueryRequestBuilder {
             onboarding,
             levelOfAssurance,
             persistentId,
-            Optional.<Cycle3Dataset>absent(),
-            Optional.<List<UserAccountCreationAttribute>>absent(),
+            Optional.<Cycle3Dataset>empty(),
+            Optional.<List<UserAccountCreationAttribute>>empty(),
             encryptedMatchingDataSetAssertion,
             authnStatementAssertion
         );

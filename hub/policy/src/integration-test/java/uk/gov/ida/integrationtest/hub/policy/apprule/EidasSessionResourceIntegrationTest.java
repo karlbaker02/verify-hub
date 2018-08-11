@@ -1,6 +1,6 @@
 package uk.gov.ida.integrationtest.hub.policy.apprule;
 
-import com.google.common.base.Optional;
+import java.util.Optional;
 import com.google.common.collect.ImmutableList;
 import helpers.JerseyClientConfigurationBuilder;
 import io.dropwizard.client.JerseyClientBuilder;
@@ -200,13 +200,13 @@ public class EidasSessionResourceIntegrationTest {
 
     private void stubSamlEngineTranslationLOAForCountry(LevelOfAssurance loa, EidasCountryDto country) throws Exception {
         samlEngineStub.reset();
-        translationDto = new InboundResponseFromCountry(IdpIdaStatus.Status.Success, Optional.absent(), country.getEntityId(), Optional.of("BLOB"), Optional.of("PID"), Optional.of(loa));
+        translationDto = new InboundResponseFromCountry(IdpIdaStatus.Status.Success, Optional.empty(), country.getEntityId(), Optional.of("BLOB"), Optional.of("PID"), Optional.of(loa));
         samlEngineStub.setupStubForCountryAuthnResponseTranslate(translationDto);
     }
 
     private void stubSamlEngineTranslationToFailForCountry(EidasCountryDto country) throws Exception {
         samlEngineStub.reset();
-        translationDto = new InboundResponseFromCountry(IdpIdaStatus.Status.RequesterError, Optional.absent(), country.getEntityId(), Optional.absent(), Optional.absent(), Optional.absent());
+        translationDto = new InboundResponseFromCountry(IdpIdaStatus.Status.RequesterError, Optional.empty(), country.getEntityId(), Optional.empty(), Optional.empty(), Optional.empty());
         samlEngineStub.setupStubForCountryAuthnResponseTranslate(translationDto);
     }
 

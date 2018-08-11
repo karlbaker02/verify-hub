@@ -214,7 +214,7 @@ public abstract class AbstractMatchRequestSentStateController<T extends Abstract
                 state.getSessionId(),
                 state.getTransactionSupportsEidas(),
                 state.getIdentityProviderEntityId(),
-                state.getRelayState().orNull(),
+                state.getRelayState().orElse(null),
                 state.getIdpLevelOfAssurance(),
                 isRegistering,
                 state.getMatchingServiceAdapterEntityId()

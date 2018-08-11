@@ -1,6 +1,6 @@
 package uk.gov.ida.hub.policy.domain.controller;
 
-import com.google.common.base.Optional;
+import java.util.Optional;
 import org.joda.time.DateTime;
 import uk.gov.ida.hub.policy.PolicyConfiguration;
 import uk.gov.ida.hub.policy.contracts.AttributeQueryRequestDto;
@@ -94,7 +94,7 @@ public class Cycle0And1MatchRequestSentStateController extends MatchRequestSentS
                 state.getSessionExpiryTimestamp(),
                 state.getIdentityProviderEntityId(),
                 matchingServiceAssertion,
-                state.getRelayState().orNull(),
+                state.getRelayState().orElse(null),
                 requestIssuerId,
                 state.getAssertionConsumerServiceUri(),
                 state.getSessionId(),
@@ -122,7 +122,7 @@ public class Cycle0And1MatchRequestSentStateController extends MatchRequestSentS
                 state.getRequestIssuerEntityId(),
                 state.getEncryptedMatchingDatasetAssertion(),
                 state.getAuthnStatementAssertion(),
-                state.getRelayState().orNull(),
+                state.getRelayState().orElse(null),
                 state.getAssertionConsumerServiceUri(),
                 state.getMatchingServiceAdapterEntityId(),
                 state.getSessionId(),
@@ -139,7 +139,7 @@ public class Cycle0And1MatchRequestSentStateController extends MatchRequestSentS
                 state.getRequestId(),
                 state.getEncryptedMatchingDatasetAssertion(),
                 state.getAuthnStatementAssertion(),
-                Optional.absent(),
+                Optional.empty(),
                 state.getRequestIssuerEntityId(),
                 state.getAssertionConsumerServiceUri(),
                 state.getMatchingServiceAdapterEntityId(),

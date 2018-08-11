@@ -1,6 +1,5 @@
 package uk.gov.ida.hub.policy.controllogic;
 
-import com.google.common.base.Optional;
 import org.joda.time.DateTime;
 import org.joda.time.Duration;
 import org.junit.Before;
@@ -24,13 +23,14 @@ import uk.gov.ida.hub.policy.proxy.SamlResponseWithAuthnRequestInformationDtoBui
 import uk.gov.ida.hub.policy.proxy.TransactionsConfigProxy;
 
 import java.net.URI;
+import java.util.Optional;
 
 import static java.util.Arrays.asList;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-import static org.assertj.core.api.Assertions.*;
 
 @RunWith(MockitoJUnitRunner.class)
 public class AuthnRequestFromTransactionHandlerTest {

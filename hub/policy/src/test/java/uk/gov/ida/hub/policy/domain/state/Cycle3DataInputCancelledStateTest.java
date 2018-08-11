@@ -1,6 +1,5 @@
 package uk.gov.ida.hub.policy.domain.state;
 
-import com.google.common.base.Optional;
 import nl.jqno.equalsverifier.EqualsVerifier;
 import org.joda.time.DateTime;
 import org.junit.Before;
@@ -8,6 +7,7 @@ import org.junit.Test;
 import uk.gov.ida.hub.policy.domain.SessionId;
 
 import java.net.URI;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 

@@ -1,7 +1,7 @@
 package uk.gov.ida.integrationtest.hub.policy.apprule;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.google.common.base.Optional;
+import java.util.Optional;
 import com.google.common.collect.ImmutableList;
 import helpers.JerseyClientConfigurationBuilder;
 import io.dropwizard.client.JerseyClientBuilder;
@@ -155,8 +155,8 @@ public class EidasMatchingServiceResourceIntegrationTest {
                 MatchingServiceIdaStatus.NoMatchingServiceMatchFromMatchingService,
                 translatedAuthnRequest.getId(),
                 MSA_ENTITY_ID,
-                Optional.absent(),
-                Optional.absent());
+                Optional.empty(),
+                Optional.empty());
         samlEngineStub.setupStubForAttributeResponseTranslate(inboundResponseFromMatchingServiceDto);
         configStub.setUpStubForCycle01NoMatchCycle3Disabled(RP_ENTITY_ID);
         configStub.setUpStubForUserAccountCreation(RP_ENTITY_ID, Collections.singletonList(UserAccountCreationAttribute.FIRST_NAME));
@@ -277,8 +277,8 @@ public class EidasMatchingServiceResourceIntegrationTest {
                 MatchingServiceIdaStatus.NoMatchingServiceMatchFromMatchingService,
                 translatedAuthnRequest.getId(),
                 MSA_ENTITY_ID,
-                Optional.absent(),
-                Optional.absent());
+                Optional.empty(),
+                Optional.empty());
     }
 
     private InboundResponseFromMatchingServiceDto aMatchResponse(){
@@ -326,7 +326,7 @@ public class EidasMatchingServiceResourceIntegrationTest {
 
     private void stubSamlEngineTranslationLOAForCountry(final LevelOfAssurance loa, final EidasCountryDto country) throws Exception {
         samlEngineStub.reset();
-        InboundResponseFromCountry translationDto = new InboundResponseFromCountry(IdpIdaStatus.Status.Success, Optional.absent(), country.getEntityId(), Optional.of("BLOB"), Optional.of("PID"), Optional.of(loa));
+        InboundResponseFromCountry translationDto = new InboundResponseFromCountry(IdpIdaStatus.Status.Success, Optional.empty(), country.getEntityId(), Optional.of("BLOB"), Optional.of("PID"), Optional.of(loa));
         samlEngineStub.setupStubForCountryAuthnResponseTranslate(translationDto);
     }
 
