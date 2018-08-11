@@ -1,11 +1,15 @@
 package uk.gov.ida.hub.policy;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;
+import com.fasterxml.jackson.datatype.joda.JodaModule;
 import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
 import com.google.inject.Scopes;
 import io.dropwizard.setup.Environment;
 import org.joda.time.DateTime;
+import org.redisson.Redisson;
+import org.redisson.codec.JsonJacksonCodec;
 import uk.gov.ida.common.ServiceInfoConfiguration;
 import uk.gov.ida.common.shared.security.IdGenerator;
 import uk.gov.ida.eventemitter.Configuration;
@@ -43,7 +47,6 @@ import uk.gov.ida.jerseyclient.JsonClient;
 import uk.gov.ida.jerseyclient.JsonResponseProcessor;
 import uk.gov.ida.restclient.ClientProvider;
 import uk.gov.ida.restclient.RestfulClientConfiguration;
-import uk.gov.ida.shared.dropwizard.infinispan.util.InfinispanCacheManager;
 import uk.gov.ida.truststore.ClientTrustStoreConfiguration;
 import uk.gov.ida.truststore.KeyStoreLoader;
 import uk.gov.ida.truststore.KeyStoreProvider;
@@ -53,7 +56,6 @@ import javax.inject.Singleton;
 import javax.ws.rs.client.Client;
 import java.net.URI;
 import java.security.KeyStore;
-import java.util.Optional;
 import java.util.concurrent.ConcurrentMap;
 
 public class PolicyModule extends AbstractModule {
@@ -65,7 +67,6 @@ public class PolicyModule extends AbstractModule {
         bind(Client.class).toProvider(DefaultClientProvider.class).in(Scopes.SINGLETON);
         bind(KeyStore.class).toProvider(KeyStoreProvider.class).in(Scopes.SINGLETON);
         bind(KeyStoreLoader.class).toInstance(new KeyStoreLoader());
-        bind(InfinispanStartupTasks.class).asEagerSingleton();
         bind(JsonResponseProcessor.class);
         bind(ObjectMapper.class).toInstance(new ObjectMapper());
         bind(EventSinkProxy.class).to(EventSinkHttpProxy.class);
@@ -124,14 +125,43 @@ public class PolicyModule extends AbstractModule {
 
     @Provides
     @Singleton
-    public ConcurrentMap<SessionId, State> sessionCache(InfinispanCacheManager infinispanCacheManager) {
-        return infinispanCacheManager.getCache("state_cache");
+    @Named("RedisSessionConfig")
+    public org.redisson.config.Config getRedissonSessionConfig() {
+        org.redisson.config.Config config = new org.redisson.config.Config();
+        config.useSingleServer()
+                .setAddress("redis://localhost:55555");
+        config.setCodec(new JsonJacksonCodec(new ObjectMapper()
+            .registerModule(new Jdk8Module().configureAbsentsAsNulls(true))
+            .registerModule(new JodaModule())
+        ));
+        return config;
     }
 
     @Provides
     @Singleton
-    public ConcurrentMap<SessionId, DateTime> datetime_cache(InfinispanCacheManager infinispanCacheManager) {
-        return infinispanCacheManager.getCache("datetime_cache");
+    @Named("RedisDatetimeConfig")
+    public org.redisson.config.Config getRedissonDatetimeConfig() {
+        org.redisson.config.Config config = new org.redisson.config.Config();
+        config.useSingleServer()
+                .setAddress("redis://localhost:55555");
+        config.setCodec(new DateTimeJacksonCodec());
+        return config;
+    }
+
+    @Provides
+    @Singleton
+    public ConcurrentMap<SessionId, State> sessionCache(
+            @Named("RedisSessionConfig") org.redisson.config.Config config
+    ) {
+        return Redisson.create(config).getMap("session_cache");
+    }
+
+    @Provides
+    @Singleton
+    public ConcurrentMap<SessionId, DateTime> datetime_cache(
+        @Named("RedisDatetimeConfig") org.redisson.config.Config config
+    ) {
+        return Redisson.create(config).getMap("datetime_cache");
     }
 
     @Provides

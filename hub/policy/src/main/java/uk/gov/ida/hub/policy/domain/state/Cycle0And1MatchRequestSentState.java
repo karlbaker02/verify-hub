@@ -32,7 +32,7 @@ public class Cycle0And1MatchRequestSentState extends MatchRequestSentState {
             @JsonProperty("matchingServiceAdapterEntityId") final String matchingServiceAdapterEntityId,
             @JsonProperty("encryptedMatchingDatasetAssertion") final String encryptedMatchingDatasetAssertion,
             @JsonProperty("authnStatementAssertion") final String authnStatementAssertion,
-            @JsonProperty("persistenId") final PersistentId persistentId) {
+            @JsonProperty("persistentId") final PersistentId persistentId) {
 
         super(
                 requestId,

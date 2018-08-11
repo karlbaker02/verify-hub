@@ -2,14 +2,13 @@ dependencies {
     testCompile configurations.test_deps_compile,
             configurations.ida_test_utils,
             configurations.saml,
-            'org.infinispan:infinispan-core:7.1.1.Final:tests',
             'nl.jqno.equalsverifier:equalsverifier:2.4.5'
 
     compile configurations.ida_utils,
             configurations.verify_event_emitter,
             configurations.common,
             configurations.dropwizard,
-            configurations.dropwizard_infinispan
+            configurations.redisson
 }
 
 apply plugin: 'application'

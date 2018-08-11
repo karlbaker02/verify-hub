@@ -1,8 +1,6 @@
 package uk.gov.ida.hub.policy;
 
 import com.fasterxml.jackson.databind.util.ISO8601DateFormat;
-import com.google.inject.AbstractModule;
-import com.google.inject.Module;
 import com.hubspot.dropwizard.guicier.GuiceBundle;
 import io.dropwizard.Application;
 import io.dropwizard.configuration.EnvironmentVariableSubstitutor;
@@ -33,10 +31,6 @@ import uk.gov.ida.hub.policy.resources.MatchingServiceFailureResponseResource;
 import uk.gov.ida.hub.policy.resources.MatchingServiceResponseResource;
 import uk.gov.ida.hub.policy.resources.ResponseFromIdpResource;
 import uk.gov.ida.hub.policy.resources.SessionResource;
-import uk.gov.ida.shared.dropwizard.infinispan.util.InfinispanBundle;
-import uk.gov.ida.shared.dropwizard.infinispan.util.InfinispanCacheManager;
-
-import javax.inject.Provider;
 
 public class PolicyApplication extends Application<PolicyConfiguration> {
 
@@ -64,11 +58,8 @@ public class PolicyApplication extends Application<PolicyConfiguration> {
         bootstrap.addBundle(new MonitoringBundle());
         bootstrap.addBundle(new LoggingBundle());
         bootstrap.addBundle(new IdaJsonProcessingExceptionMapperBundle());
-        final InfinispanBundle infinispanBundle = new InfinispanBundle();
-        // the infinispan cache manager needs to be lazy loaded because it is not initialized at this point.
-        bootstrap.addBundle(infinispanBundle);
         guiceBundle = GuiceBundle.defaultBuilder(PolicyConfiguration.class)
-                .modules(getPolicyModule(), new EventEmitterModule(),  bindInfinispan(infinispanBundle.getInfinispanCacheManagerProvider()))
+                .modules(getPolicyModule(), new EventEmitterModule())
                 .build();
         bootstrap.addBundle(guiceBundle);
     }
@@ -109,14 +100,5 @@ public class PolicyApplication extends Application<PolicyConfiguration> {
             environment.jersey().register(CountriesResource.class);
             environment.jersey().register(EidasSessionResource.class);
         }
-    }
-
-    protected Module bindInfinispan(Provider<InfinispanCacheManager> cacheManagerProvider) {
-        return new AbstractModule() {
-            @Override
-            protected void configure() {
-                bind(InfinispanCacheManager.class).toProvider(cacheManagerProvider);
-            }
-        };
     }
 }

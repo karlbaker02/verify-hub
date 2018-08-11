@@ -11,7 +11,7 @@ import java.io.Serializable;
 import java.net.URI;
 import java.util.Objects;
 
-public final class NoMatchState extends AbstractState implements ResponseProcessingState, ResponsePreparedState, Serializable {
+public class NoMatchState extends AbstractState implements ResponseProcessingState, ResponsePreparedState, Serializable {
 
     private static final long serialVersionUID = 4256395503097984488L;
 

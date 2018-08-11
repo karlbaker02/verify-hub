@@ -8,8 +8,6 @@ import io.dropwizard.util.Duration;
 import uk.gov.ida.common.ServiceInfoConfiguration;
 import uk.gov.ida.configuration.ServiceNameConfiguration;
 import uk.gov.ida.restclient.RestfulClientConfiguration;
-import uk.gov.ida.shared.dropwizard.infinispan.config.InfinispanConfiguration;
-import uk.gov.ida.shared.dropwizard.infinispan.config.InfinispanServiceConfiguration;
 import uk.gov.ida.truststore.ClientTrustStoreConfiguration;
 
 import javax.validation.Valid;
@@ -17,7 +15,7 @@ import javax.validation.constraints.NotNull;
 import java.net.URI;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class PolicyConfiguration extends Configuration implements RestfulClientConfiguration, ServiceNameConfiguration, InfinispanServiceConfiguration, AssertionLifetimeConfiguration {
+public class PolicyConfiguration extends Configuration implements RestfulClientConfiguration, ServiceNameConfiguration, AssertionLifetimeConfiguration {
 
     @Valid
     @JsonProperty
@@ -33,11 +31,6 @@ public class PolicyConfiguration extends Configuration implements RestfulClientC
     @NotNull
     @JsonProperty
     protected Duration matchingServiceResponseWaitPeriod;
-
-    @Valid
-    @NotNull
-    @JsonProperty
-    protected InfinispanConfiguration infinispan;
 
     @Valid
     @NotNull
@@ -101,11 +94,6 @@ public class PolicyConfiguration extends Configuration implements RestfulClientC
 
     public org.joda.time.Duration getMatchingServiceResponseWaitPeriod(){
         return new org.joda.time.Duration(matchingServiceResponseWaitPeriod.toMilliseconds());
-    }
-
-    @Override
-    public InfinispanConfiguration getInfinispan() {
-        return infinispan;
     }
 
     @Override

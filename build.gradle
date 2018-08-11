@@ -53,6 +53,7 @@ subprojects {
           jcenter()
         }
         else {
+            mavenCentral()
           maven { url 'https://artifactory.ida.digital.cabinet-office.gov.uk/artifactory/whitelisted-repos' }
         }
     }
@@ -84,6 +85,7 @@ subprojects {
         integrationtests
         config
         verify_event_emitter
+        redisson
         ida_utils
         ida_test_utils
         dev_pki
@@ -108,6 +110,8 @@ subprojects {
         config 'commons-io:commons-io:2.1'
 
         verify_event_emitter "uk.gov.ida:verify-event-emitter:0.0.1-52"
+
+        redisson 'org.redisson:redisson:3.7.5'
 
         ida_utils "uk.gov.ida:common-utils:2.0.0-$dependencyVersions.ida_utils",
                 "uk.gov.ida:security-utils:2.0.0-$dependencyVersions.ida_utils",
