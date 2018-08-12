@@ -23,6 +23,7 @@ import uk.gov.ida.hub.policy.domain.SessionId;
 import uk.gov.ida.hub.policy.domain.SessionRepository;
 import uk.gov.ida.hub.policy.domain.State;
 import uk.gov.ida.hub.policy.domain.controller.StateControllerFactory;
+import uk.gov.ida.hub.policy.factories.CacheFactory;
 import uk.gov.ida.hub.policy.factories.SamlAuthnResponseTranslatorDtoFactory;
 import uk.gov.ida.hub.policy.logging.HubEventLogger;
 import uk.gov.ida.hub.policy.proxy.IdentityProvidersConfigProxy;
@@ -53,7 +54,6 @@ import javax.inject.Singleton;
 import javax.ws.rs.client.Client;
 import java.net.URI;
 import java.security.KeyStore;
-import java.util.Optional;
 import java.util.concurrent.ConcurrentMap;
 
 public class PolicyModule extends AbstractModule {
@@ -124,14 +124,18 @@ public class PolicyModule extends AbstractModule {
 
     @Provides
     @Singleton
-    public ConcurrentMap<SessionId, State> sessionCache(InfinispanCacheManager infinispanCacheManager) {
-        return infinispanCacheManager.getCache("state_cache");
+    public ConcurrentMap<SessionId, State> sessionCache(
+            PolicyConfiguration configuration,
+            InfinispanCacheManager infinispanCacheManager) {
+        return CacheFactory.getStateCache(configuration, infinispanCacheManager);
     }
 
     @Provides
     @Singleton
-    public ConcurrentMap<SessionId, DateTime> datetime_cache(InfinispanCacheManager infinispanCacheManager) {
-        return infinispanCacheManager.getCache("datetime_cache");
+    public ConcurrentMap<SessionId, DateTime> datetime_cache(
+            PolicyConfiguration configuration,
+            InfinispanCacheManager infinispanCacheManager) {
+        return CacheFactory.getDatetimeCache(configuration, infinispanCacheManager);
     }
 
     @Provides
