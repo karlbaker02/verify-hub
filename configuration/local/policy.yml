@@ -14,14 +14,18 @@ logging:
   appenders:
     - type: console
 
-
-infinispan:
-  bindAddress: 
-  initialHosts: 
-  clusterName: 
-  type: standalone
-  expiration: 8h
-  persistenceToFileEnabled: false
+cache:
+  infinispan:
+    enabled: true
+    configuration:
+      bindAddress:
+      initialHosts:
+      clusterName:
+      type: standalone
+      expiration: 8h
+      persistenceToFileEnabled: false
+  redis:
+    enabled: false
 
 eventSinkUri: ${EVENT_SINK_URL}
 

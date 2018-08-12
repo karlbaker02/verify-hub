@@ -5,9 +5,11 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import io.dropwizard.Configuration;
 import io.dropwizard.client.JerseyClientConfiguration;
 import io.dropwizard.util.Duration;
-import org.redisson.config.Config;
 import uk.gov.ida.common.ServiceInfoConfiguration;
 import uk.gov.ida.configuration.ServiceNameConfiguration;
+import uk.gov.ida.hub.policy.configuration.CacheConfiguration;
+import uk.gov.ida.hub.policy.configuration.EventEmitterConfiguration;
+import uk.gov.ida.hub.policy.configuration.RedisConfiguration;
 import uk.gov.ida.restclient.RestfulClientConfiguration;
 import uk.gov.ida.shared.dropwizard.infinispan.config.InfinispanConfiguration;
 import uk.gov.ida.shared.dropwizard.infinispan.config.InfinispanServiceConfiguration;
@@ -38,11 +40,7 @@ public class PolicyConfiguration extends Configuration implements RestfulClientC
     @Valid
     @NotNull
     @JsonProperty
-    protected InfinispanConfiguration infinispan;
-
-    @Valid
-    @JsonProperty
-    protected Config redis;
+    protected CacheConfiguration cache;
 
     @Valid
     @NotNull
@@ -108,13 +106,8 @@ public class PolicyConfiguration extends Configuration implements RestfulClientC
         return new org.joda.time.Duration(matchingServiceResponseWaitPeriod.toMilliseconds());
     }
 
-    @Override
-    public InfinispanConfiguration getInfinispan() {
-        return infinispan;
-    }
-
-    public Config getRedis() {
-        return redis;
+    public CacheConfiguration getCache() {
+        return cache;
     }
 
     @Override
@@ -165,5 +158,10 @@ public class PolicyConfiguration extends Configuration implements RestfulClientC
 
     public EventEmitterConfiguration getEventEmitterConfiguration() {
         return eventEmitterConfiguration;
+    }
+
+    @Override
+    public InfinispanConfiguration getInfinispan() {
+        return cache.getInfinispan().getConfiguration();
     }
 }

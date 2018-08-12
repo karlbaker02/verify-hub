@@ -4,7 +4,7 @@ import org.joda.time.DateTime;
 import org.redisson.Redisson;
 import org.redisson.codec.SerializationCodec;
 import org.redisson.config.Config;
-import uk.gov.ida.hub.policy.PolicyConfiguration;
+import uk.gov.ida.hub.policy.configuration.CacheConfiguration;
 import uk.gov.ida.hub.policy.controllogic.MultiCache;
 import uk.gov.ida.hub.policy.domain.SessionId;
 import uk.gov.ida.hub.policy.domain.State;
@@ -17,16 +17,16 @@ import java.util.concurrent.ConcurrentMap;
 public class CacheFactory {
 
     public static ConcurrentMap<SessionId, State> getStateCache(
-            PolicyConfiguration configuration,
+            CacheConfiguration configuration,
             InfinispanCacheManager infinispanCacheManager
     ) {
         List<ConcurrentMap<SessionId, State>> caches = new ArrayList<>();
-        if (configuration.getRedis() != null) {
-            Config redisConfig = configuration.getRedis().setCodec(new SerializationCodec());
+        if (configuration.getRedis().isEnabled()) {
+            Config redisConfig = configuration.getRedis().getConfiguration().setCodec(new SerializationCodec());
             caches.add(Redisson.create(redisConfig).getMap("state_cache"));
         }
 
-        if (configuration.getInfinispan() != null) {
+        if (configuration.getInfinispan().isEnabled()) {
             caches.add(infinispanCacheManager.getCache("state_cache"));
         }
 
@@ -34,16 +34,16 @@ public class CacheFactory {
     }
 
     public static ConcurrentMap<SessionId, DateTime> getDatetimeCache(
-            PolicyConfiguration configuration,
+            CacheConfiguration configuration,
             InfinispanCacheManager infinispanCacheManager
     ) {
         List<ConcurrentMap<SessionId, DateTime>> caches = new ArrayList<>();
-        if (configuration.getRedis() != null) {
-            Config redisConfig = configuration.getRedis().setCodec(new SerializationCodec());
+        if (configuration.getRedis().isEnabled()) {
+            Config redisConfig = configuration.getRedis().getConfiguration().setCodec(new SerializationCodec());
             caches.add(Redisson.create(redisConfig).getMap("datetime_cache"));
         }
 
-        if (configuration.getInfinispan() != null) {
+        if (configuration.getInfinispan().isEnabled()) {
             caches.add(infinispanCacheManager.getCache("datetime_cache"));
         }
 

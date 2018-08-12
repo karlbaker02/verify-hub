@@ -4,6 +4,7 @@ import io.dropwizard.client.JerseyClientConfiguration;
 import io.dropwizard.util.Duration;
 import uk.gov.ida.common.ServiceInfoConfiguration;
 import uk.gov.ida.hub.policy.PolicyConfiguration;
+import uk.gov.ida.hub.policy.configuration.CacheConfiguration;
 import uk.gov.ida.truststore.ClientTrustStoreConfiguration;
 
 import java.net.URI;
@@ -15,6 +16,7 @@ public class PolicyConfigurationBuilder {
 
     private Duration timeoutPeriod = Duration.minutes(2);
     private ServiceInfoConfiguration serviceInfo = aServiceInfo().withName("Policy").build();
+    private CacheConfiguration cacheConfiguration;
 
     public static PolicyConfigurationBuilder aPolicyConfiguration() {
         return new PolicyConfigurationBuilder();
@@ -25,6 +27,7 @@ public class PolicyConfigurationBuilder {
                 new JerseyClientConfiguration(),
                 serviceInfo,
                 mock(ClientTrustStoreConfiguration.class),
+                cacheConfiguration,
                 timeoutPeriod,
                 Duration.minutes(1),
                 Duration.minutes(15));
@@ -40,12 +43,17 @@ public class PolicyConfigurationBuilder {
         return this;
     }
 
+    public PolicyConfigurationBuilder withCacheConfiguration(CacheConfiguration cacheConfiguration) {
+        this.cacheConfiguration = cacheConfiguration;
+        return this;
+    }
+
     private static class TestPolicyConfiguration extends PolicyConfiguration {
         private TestPolicyConfiguration(
                 JerseyClientConfiguration httpClient,
                 ServiceInfoConfiguration serviceInfo,
                 ClientTrustStoreConfiguration clientTrustStoreConfiguration,
-
+                CacheConfiguration cacheConfiguration,
                 Duration timeoutPeriod,
                 Duration matchingServiceResponseWaitPeriod,
                 Duration assertionLifetime) {
@@ -56,6 +64,7 @@ public class PolicyConfigurationBuilder {
             this.httpClient = httpClient;
             this.serviceInfo = serviceInfo;
             this.clientTrustStoreConfiguration = clientTrustStoreConfiguration;
+            this.cache = cacheConfiguration;
 
             this.timeoutPeriod = timeoutPeriod;
             this.matchingServiceResponseWaitPeriod = matchingServiceResponseWaitPeriod;

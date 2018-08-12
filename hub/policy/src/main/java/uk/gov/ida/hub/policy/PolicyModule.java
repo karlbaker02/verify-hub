@@ -127,7 +127,7 @@ public class PolicyModule extends AbstractModule {
     public ConcurrentMap<SessionId, State> sessionCache(
             PolicyConfiguration configuration,
             InfinispanCacheManager infinispanCacheManager) {
-        return CacheFactory.getStateCache(configuration, infinispanCacheManager);
+        return CacheFactory.getStateCache(configuration.getCache(), infinispanCacheManager);
     }
 
     @Provides
@@ -135,7 +135,7 @@ public class PolicyModule extends AbstractModule {
     public ConcurrentMap<SessionId, DateTime> datetime_cache(
             PolicyConfiguration configuration,
             InfinispanCacheManager infinispanCacheManager) {
-        return CacheFactory.getDatetimeCache(configuration, infinispanCacheManager);
+        return CacheFactory.getDatetimeCache(configuration.getCache(), infinispanCacheManager);
     }
 
     @Provides
